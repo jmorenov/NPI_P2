@@ -7,6 +7,10 @@ using Microsoft.Kinect;
 using System.Windows;
 using System.Windows.Media;
 
+/// <summary>
+/// Movimiento 7 NPI.
+/// </summary>
+
 namespace NPI_P2
 {
     /// <summary>
