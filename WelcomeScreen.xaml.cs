@@ -15,11 +15,11 @@ using System.Windows.Shapes;
 namespace NPI_P2
 {
     /// <summary>
-    /// Lógica de interacción para MainWindow.xaml
+    /// Lógica de interacción para WelcomeScreen.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class WelcomeScreen : Page
     {
-        public MainWindow()
+        public WelcomeScreen()
         {
             InitializeComponent();
         }
@@ -29,19 +29,7 @@ namespace NPI_P2
         /// </summary>
         /// <param name="sender">object sending the event</param>
         /// <param name="e">event arguments</param>
-        private void WindowLoaded(object sender, RoutedEventArgs e)
-        {
-            //mainFrame.NavigationService.Navigate(new Page1());
-            //mainFrame.Navigate(new LoadingScreen());
-            mainFrame.Navigate(new FitnessScreen());
-        }
-
-        /// <summary>
-        /// Execute shutdown tasks
-        /// </summary>
-        /// <param name="sender">object sending the event</param>
-        /// <param name="e">event arguments</param>
-        private void WindowClosing(object sender, System.ComponentModel.CancelEventArgs e)
+        private void PageLoaded(object sender, RoutedEventArgs e)
         {
 
         }
