@@ -36,7 +36,6 @@ namespace NPI_P2
         private static List<JointType> jointsTypes = new List<JointType> 
                                                                             { JointType.ShoulderLeft, JointType.ElbowLeft, JointType.WristLeft, JointType.HandLeft,
                                                                             JointType.ShoulderRight, JointType.ElbowRight, JointType.WristRight, JointType.HandRight};
-
         /// <summary>
         /// Lista de tamaño igual al número de JoinType que hay que comprobar, 
         /// en esta lista se almacenan los valores de error de cada posición.

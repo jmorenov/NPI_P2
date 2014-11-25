@@ -55,6 +55,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Controllers\KinectController.cs" />
+    <Compile Include="Controllers\MovementController.cs" />
     <Compile Include="FitnessScreen.xaml.cs">
       <DependentUpon>FitnessScreen.xaml</DependentUpon>
     </Compile>
@@ -97,7 +99,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Movimiento7.cs" />
+    <Compile Include="Movements\Movimiento7.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

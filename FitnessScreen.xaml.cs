@@ -57,7 +57,7 @@ namespace NPI_P2
         private readonly Brush inferredJointBrush = Brushes.Yellow;
 
 
-        private Movimiento7 mov = new Movimiento7();
+        private MovementController controller = new MovementController();
 
 
         /// <summary>
@@ -137,7 +137,7 @@ namespace NPI_P2
 
             if (null == this.sensor)
             {
-                this.statusBarText.Text = Properties.Resources.NoKinectReady;
+                //this.statusBarText.Text = Properties.Resources.NoKinectReady;
             }
         }
 
@@ -257,7 +257,7 @@ namespace NPI_P2
 
                         if (skel.TrackingState == SkeletonTrackingState.Tracked)
                         {
-                            mov.setSkeleton(skel);
+                            controller.setSkeleton(skel);
                             this.DrawBonesAndJoints(skel, dc);
                         }
                         else if (skel.TrackingState == SkeletonTrackingState.PositionOnly)
@@ -321,7 +321,7 @@ namespace NPI_P2
                 if (joint.TrackingState == JointTrackingState.Tracked)
                 {
                     //drawBrush = this.trackedJointBrush;
-                    drawBrush = mov.getBrush(joint);
+                    drawBrush = controller.getBrush(joint);
                 }
                 else if (joint.TrackingState == JointTrackingState.Inferred)
                 {
@@ -379,30 +379,10 @@ namespace NPI_P2
             if (joint0.TrackingState == JointTrackingState.Tracked && joint1.TrackingState == JointTrackingState.Tracked)
             {
                 //drawPen = this.trackedBonePen;
-                drawPen = mov.getPen(jointType1);
+                drawPen = controller.getPen(jointType1);
             }
 
             drawingContext.DrawLine(drawPen, this.SkeletonPointToScreen(joint0.Position), this.SkeletonPointToScreen(joint1.Position));
-        }
-
-        /// <summary>
-        /// Handles the checking or unchecking of the seated mode combo box
-        /// </summary>
-        /// <param name="sender">object sending the event</param>
-        /// <param name="e">event arguments</param>
-        private void CheckBoxSeatedModeChanged(object sender, RoutedEventArgs e)
-        {
-            if (null != this.sensor)
-            {
-                if (this.checkBoxSeatedMode.IsChecked.GetValueOrDefault())
-                {
-                    this.sensor.SkeletonStream.TrackingMode = SkeletonTrackingMode.Seated;
-                }
-                else
-                {
-                    this.sensor.SkeletonStream.TrackingMode = SkeletonTrackingMode.Default;
-                }
-            }
         }
     }
 }
