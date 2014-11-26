@@ -168,6 +168,7 @@ namespace NPI_P2
                             movController.setSkeleton(skel);
                             this.DrawBonesAndJoints(skel, dc);
                             movController.refresh();
+                            //Mensaje ejercicio finalizado.
                         }
                         else if (skel.TrackingState == SkeletonTrackingState.PositionOnly)
                         {

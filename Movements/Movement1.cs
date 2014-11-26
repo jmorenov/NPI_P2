@@ -9,46 +9,30 @@ using System.Windows.Media;
 
 namespace NPI_P2
 {
-    class Movement1
+    class Movement1 : Movement
     {
-        Skeleton skeleton;
-        private readonly Pen trackedBonePen = new Pen(Brushes.Green, 6);
         private readonly Pen correctMove = new Pen(Brushes.Green, 5);
         private readonly Pen incorrectMove = new Pen(Brushes.Red, 5);
         private readonly Pen closeToMove = new Pen(Brushes.Yellow, 5);
 
-        private readonly Brush trackedJointBrush = new SolidColorBrush(Color.FromArgb(255, 68, 192, 68));
-
-        public Movement1() { }
-
-        public Movement1(Skeleton s) { setSkeleton(s); }
-
-        public void setSkeleton(Skeleton s)
+        public override bool isFinished()
         {
-            skeleton = s;
-        }
-
-        public bool isFinished()
-        {
+            if ((IsAlignedBodyAndArms() && AreFeetTogether()) || (IsAlignedBodyAndArms() && AreFeetSeparate()))
+                return true;
             return false;
-        }
-
-        public Brush getBrush(Joint joint)
-        {
-            return trackedJointBrush;
         }
 
         /// <summary>
         /// Devuelve el objeto Pen con el que pintar el hueso que se une con la parte del cuerpo JointType.
         /// </summary>
-        public Pen getPen(JointType j)
+        public override Pen getPen(JointType j)
         {
             if ((IsAlignedBodyAndArms() && AreFeetTogether()) || (IsAlignedBodyAndArms() && AreFeetSeparate()))
             {
                 return correctMove;
             }
-            else if ((IsAlignedBodyAndArms() && !AreFeetSeparate() && !AreFeetTogether()) 
-                || (!IsAlignedBodyAndArms() && AreFeetSeparate() && !AreFeetTogether()) 
+            else if ((IsAlignedBodyAndArms() && !AreFeetSeparate() && !AreFeetTogether())
+                || (!IsAlignedBodyAndArms() && AreFeetSeparate() && !AreFeetTogether())
                 || (!IsAlignedBodyAndArms() && !AreFeetSeparate() && AreFeetTogether()))
             {
                 return closeToMove;
@@ -119,10 +103,10 @@ namespace NPI_P2
 
             //Create method to verify if the center of the body is completely aligned
             //head with shoulder center and with hip center
-            if (Math.Abs(HeadCenterPosX-ShoulCenterPosX)<=0.05 && Math.Abs(ShoulCenterPosX-HipCenterPosX)<=0.05)
+            if (Math.Abs(HeadCenterPosX - ShoulCenterPosX) <= 0.05 && Math.Abs(ShoulCenterPosX - HipCenterPosX) <= 0.05)
             {
                 //if position of left wrist is between [ProjectedPointWrist-DistError,ProjectedPointWrist+DistError]
-                if (Math.Abs(WriLPosX-ProjectedPointWristLX)<= DistErrorL && Math.Abs(WriRPosX-ProjectedPointWristRX )<= DistErrorR)
+                if (Math.Abs(WriLPosX - ProjectedPointWristLX) <= DistErrorL && Math.Abs(WriRPosX - ProjectedPointWristRX) <= DistErrorR)
                 {
                     return true;
                 }
@@ -134,98 +118,98 @@ namespace NPI_P2
         //first position to be Tracked and Accepted
         private bool AreFeetTogether()
         {
-                foreach (Joint joint in skeleton.Joints)
-                {
-                    if (joint.TrackingState == JointTrackingState.Tracked)
-                    {//first verify if the body is alignet and arms are in a relaxed position
+            foreach (Joint joint in skeleton.Joints)
+            {
+                if (joint.TrackingState == JointTrackingState.Tracked)
+                {//first verify if the body is alignet and arms are in a relaxed position
 
-                        //{here verify if the feet are together
-                        //use the same strategy that was used in the previous case of the arms in a  relaxed position
-                        double HipCenterPosX = skeleton.Joints[JointType.HipCenter].Position.X;
-                        double HipCenterPosY = skeleton.Joints[JointType.HipCenter].Position.Y;
-                        double HipCenterPosZ = skeleton.Joints[JointType.HipCenter].Position.Z;
+                    //{here verify if the feet are together
+                    //use the same strategy that was used in the previous case of the arms in a  relaxed position
+                    double HipCenterPosX = skeleton.Joints[JointType.HipCenter].Position.X;
+                    double HipCenterPosY = skeleton.Joints[JointType.HipCenter].Position.Y;
+                    double HipCenterPosZ = skeleton.Joints[JointType.HipCenter].Position.Z;
 
-                        //if left ankle is very close to right ankle then verify the rest of the skeleton points
-                        //if (skeleton.Joints[JointType.AnkleLeft].Equals(skeleton.Joints[JointType.AnkleRight])) 
-                        double AnkLPosX = skeleton.Joints[JointType.AnkleLeft].Position.X;
-                        double AnkLPosY = skeleton.Joints[JointType.AnkleLeft].Position.Y;
-                        double AnkLPosZ = skeleton.Joints[JointType.AnkleLeft].Position.Z;
+                    //if left ankle is very close to right ankle then verify the rest of the skeleton points
+                    //if (skeleton.Joints[JointType.AnkleLeft].Equals(skeleton.Joints[JointType.AnkleRight])) 
+                    double AnkLPosX = skeleton.Joints[JointType.AnkleLeft].Position.X;
+                    double AnkLPosY = skeleton.Joints[JointType.AnkleLeft].Position.Y;
+                    double AnkLPosZ = skeleton.Joints[JointType.AnkleLeft].Position.Z;
 
-                        double AnkRPosX = skeleton.Joints[JointType.AnkleRight].Position.X;
-                        double AnkRPosY = skeleton.Joints[JointType.AnkleRight].Position.Y;
-                        double AnkRPosZ = skeleton.Joints[JointType.AnkleRight].Position.Z;
-                        //assume that the distance Y between HipCenter to each foot is the same
-                        double distHiptoAnkleL = HipCenterPosY - AnkLPosY;
-                        //caldulate admited error 5% that correspond to 9 degrees for each side
-                        double radian1 = (4.5 * Math.PI) / 180;
-                        double DistErrorL = distHiptoAnkleL * Math.Tan(radian1);
-                        //determine of projected point from HIP CENTER to LEFT ANKLE and RIGHT and then assume error
-                        double ProjectedPointFootLX = HipCenterPosX;
-                        double ProjectedPointFootLY = AnkLPosY;
-                        double ProjectedPointFootLZ = HipCenterPosZ;
+                    double AnkRPosX = skeleton.Joints[JointType.AnkleRight].Position.X;
+                    double AnkRPosY = skeleton.Joints[JointType.AnkleRight].Position.Y;
+                    double AnkRPosZ = skeleton.Joints[JointType.AnkleRight].Position.Z;
+                    //assume that the distance Y between HipCenter to each foot is the same
+                    double distHiptoAnkleL = HipCenterPosY - AnkLPosY;
+                    //caldulate admited error 5% that correspond to 9 degrees for each side
+                    double radian1 = (4.5 * Math.PI) / 180;
+                    double DistErrorL = distHiptoAnkleL * Math.Tan(radian1);
+                    //determine of projected point from HIP CENTER to LEFT ANKLE and RIGHT and then assume error
+                    double ProjectedPointFootLX = HipCenterPosX;
+                    double ProjectedPointFootLY = AnkLPosY;
+                    double ProjectedPointFootLZ = HipCenterPosZ;
 
 
 
-                        // could variate AnkLposX and AnkLPosY
-                        if (Math.Abs(AnkLPosX - ProjectedPointFootLX) <= DistErrorL && Math.Abs(AnkRPosX - ProjectedPointFootLX) <= DistErrorL)
-                            return true;
-                        else
-                            return false;
-                  
-                    }//CLOSE if (joint.TrackingState == JointTrackingState.Tracked)
-                    else return false;
-                }//close foreach
+                    // could variate AnkLposX and AnkLPosY
+                    if (Math.Abs(AnkLPosX - ProjectedPointFootLX) <= DistErrorL && Math.Abs(AnkRPosX - ProjectedPointFootLX) <= DistErrorL)
+                        return true;
+                    else
+                        return false;
+
+                }//CLOSE if (joint.TrackingState == JointTrackingState.Tracked)
+                else return false;
+            }//close foreach
             return false;
         }//close method AreFeetTogether
-        //method for the second position feet separate between 60 degrees to be accepted
+        //method for the second position feet separate between 30 degrees to be accepted
         private bool AreFeetSeparate()
         {
-                foreach (Joint joint in skeleton.Joints)
-                {
-                    if (joint.TrackingState == JointTrackingState.Tracked)
-                    {//first verify if the body is alignet and arms are in a relaxed position
+            foreach (Joint joint in skeleton.Joints)
+            {
+                if (joint.TrackingState == JointTrackingState.Tracked)
+                {//first verify if the body is alignet and arms are in a relaxed position
 
 
-                        //{//here verify if the feet are together
-                        //use the same strategy that was used in the previous case of the arms in a  relaxed position
-                        double HipCenterPosX = skeleton.Joints[JointType.HipCenter].Position.X;
-                        double HipCenterPosY = skeleton.Joints[JointType.HipCenter].Position.Y;
-                        double HipCenterPosZ = skeleton.Joints[JointType.HipCenter].Position.Z;
+                    //{//here verify if the feet are together
+                    //use the same strategy that was used in the previous case of the arms in a  relaxed position
+                    double HipCenterPosX = skeleton.Joints[JointType.HipCenter].Position.X;
+                    double HipCenterPosY = skeleton.Joints[JointType.HipCenter].Position.Y;
+                    double HipCenterPosZ = skeleton.Joints[JointType.HipCenter].Position.Z;
 
-                        //if left ankle is very close to right ankle then verify the rest of the skeleton points
-                        //if (skeleton.Joints[JointType.AnkleLeft].Equals(skeleton.Joints[JointType.AnkleRight])) 
-                        double AnkLPosX = skeleton.Joints[JointType.AnkleLeft].Position.X;
-                        double AnkLPosY = skeleton.Joints[JointType.AnkleLeft].Position.Y;
-                        double AnkLPosZ = skeleton.Joints[JointType.AnkleLeft].Position.Z;
+                    //if left ankle is very close to right ankle then verify the rest of the skeleton points
+                    //if (skeleton.Joints[JointType.AnkleLeft].Equals(skeleton.Joints[JointType.AnkleRight])) 
+                    double AnkLPosX = skeleton.Joints[JointType.AnkleLeft].Position.X;
+                    double AnkLPosY = skeleton.Joints[JointType.AnkleLeft].Position.Y;
+                    double AnkLPosZ = skeleton.Joints[JointType.AnkleLeft].Position.Z;
 
-                        double AnkRPosX = skeleton.Joints[JointType.AnkleRight].Position.X;
-                        double AnkRPosY = skeleton.Joints[JointType.AnkleRight].Position.Y;
-                        double AnkRPosZ = skeleton.Joints[JointType.AnkleRight].Position.Z;
-                        //assume that the distance Y between HipCenter to each foot is the same
-                        double distHiptoAnkleL = HipCenterPosY - AnkLPosY;
-                        //caldulate admited error 5% that correspond to 9 degrees for each side
-                        double radian1 = (4.5 * Math.PI) / 180;
-                        double DistErrorL = distHiptoAnkleL * Math.Tan(radian1);
-                        //determine of projected point from HIP CENTER to LEFT ANKLE and RIGHT and then assume error
-                        double ProjectedPointFootLX = HipCenterPosX;
-                        double ProjectedPointFootLY = AnkLPosY;
-                        double ProjectedPointFootLZ = HipCenterPosZ;
+                    double AnkRPosX = skeleton.Joints[JointType.AnkleRight].Position.X;
+                    double AnkRPosY = skeleton.Joints[JointType.AnkleRight].Position.Y;
+                    double AnkRPosZ = skeleton.Joints[JointType.AnkleRight].Position.Z;
+                    //assume that the distance Y between HipCenter to each foot is the same
+                    double distHiptoAnkleL = HipCenterPosY - AnkLPosY;
+                    //caldulate admited error 5% that correspond to 9 degrees for each side
+                    double radian1 = (ERROR_PERCENT * Math.PI) / 180;
+                    double DistErrorL = distHiptoAnkleL * Math.Tan(radian1);
+                    //determine of projected point from HIP CENTER to LEFT ANKLE and RIGHT and then assume error
+                    double ProjectedPointFootLX = HipCenterPosX;
+                    double ProjectedPointFootLY = AnkLPosY;
+                    double ProjectedPointFootLZ = HipCenterPosZ;
 
-                        double radian2 = (30 * Math.PI) / 180;
-                        double DistSeparateFoot = distHiptoAnkleL * Math.Tan(radian2);
-                        //DrawingVisual MyDrawingVisual = new DrawingVisual();
+                    double radian2 = (angle * Math.PI) / 180;
+                    double DistSeparateFoot = distHiptoAnkleL * Math.Tan(radian2);
+                    //DrawingVisual MyDrawingVisual = new DrawingVisual();
 
 
-                        // could variate AnkLposX and AnkLPosY
-                        if (Math.Abs(AnkRPosX-AnkLPosX) <= Math.Abs( DistSeparateFoot + DistErrorL) && Math.Abs( AnkRPosX - AnkLPosX) >= Math.Abs((DistSeparateFoot) - DistErrorL))
-                            return true;
-                        else return false;
-                        
-
-                    }//CLOSE if (joint.TrackingState == JointTrackingState.Tracked)
+                    // could variate AnkLposX and AnkLPosY
+                    if (Math.Abs(AnkRPosX - AnkLPosX) <= Math.Abs(DistSeparateFoot + DistErrorL) && Math.Abs(AnkRPosX - AnkLPosX) >= Math.Abs((DistSeparateFoot) - DistErrorL))
+                        return true;
                     else return false;
-                }//close foreach
+
+
+                }//CLOSE if (joint.TrackingState == JointTrackingState.Tracked)
+                else return false;
+            }//close foreach
             return false;
         }//close method AreFeetseparate
     }
-    }
+}

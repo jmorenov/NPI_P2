@@ -9,46 +9,32 @@ using System.Windows.Media;
 
 namespace NPI_P2
 {
-    class Movement5
+    class Movement5 : Movement
     {
-        Skeleton skeleton;
-
         private readonly Pen huesosOK = new Pen(Brushes.Green, 6);
         private readonly Pen huesosFAIL = new Pen(Brushes.Red, 6);
         private readonly Pen huesoAdelantado = new Pen(Brushes.Turquoise, 6);
         private readonly Pen huesoAtrasado = new Pen(Brushes.Yellow, 6);
 
-        /// <summary>
-        /// Brush used for drawing joints that are currently tracked
-        /// </summary>
-        private readonly Brush trackedJointBrush = new SolidColorBrush(Color.FromArgb(255, 68, 192, 68));
-
-        /// <summary>
-        /// Pen used for drawing bones that are currently tracked
-        /// </summary>
-        private readonly Pen trackedBonePen = new Pen(Brushes.Green, 6);
-
         private Pen huesoLeft, huesoRight;
-
-        public Movement5() { }
-
-        public Movement5(Skeleton s) { setSkeleton(s); }
-
-        public bool isFinished()
-        {
-            return false;
-        }
         
-        public void setSkeleton(Skeleton s)
+        public override void setSkeleton(Skeleton s)
         {
-            skeleton = s;
+            base.setSkeleton(s);
             check_movimiento();
+        }
+
+        public override bool isFinished()
+        {
+            if (brazoIzqOK() && manosSeparadas() && brazoDerOK())
+                return true;
+            return false;
         }
 
         /// <summary>
         /// Devuelve el objeto Pen con el que pintar el hueso que se une con la parte del cuerpo JointType.
         /// </summary>
-        public Pen getPen(JointType j)
+        public override Pen getPen(JointType j)
         {
             if (j == JointType.ElbowLeft || j == JointType.WristLeft || j == JointType.HandLeft)
                 return huesoLeft;
@@ -56,14 +42,6 @@ namespace NPI_P2
                 return huesoRight;
             else
                 return trackedBonePen;
-        }
-
-        /// <summary>
-        /// Devuelve el objeto Brush con el que pintar la posición del cuerpo Joint.
-        /// </summary>
-        public Brush getBrush(Joint joint)
-        {
-            return trackedJointBrush;
         }
 
         // Comprueba si el brazo derecho está en la posición correcta

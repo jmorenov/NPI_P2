@@ -11,122 +11,47 @@ namespace NPI_P2
 {
     public class MovementController
     {
-        private Movement1 mov1 = new Movement1();
-        private Movement5 mov5 = new Movement5();
-        private Movement7 mov7 = new Movement7();
-        private Movement9 mov9 = new Movement9();
-        private Movement10 mov10 = new Movement10();
+        private List<Movement> m = new List<Movement>{new Movement1(), new Movement5(), new Movement7(), new Movement9(), new Movement10()};
 
-        private readonly Brush trackedJointBrush = new SolidColorBrush(Color.FromArgb(255, 68, 192, 68));
-        private readonly Pen trackedBonePen = new Pen(Brushes.Green, 6);
+        private int mov_i = 0;
+        private double ERROR;
+        private float angle;
+        private bool exercise_started = false;
 
-        private int mov = 0;
-        private double difficulty;
-        private double angulo;
-        public MovementController() { }
-
-        public void startExercise(double difficulty, double angulo)
+        public void startExercise(double ERROR, float angle)
         {
-            this.difficulty = difficulty;
-            this.angulo = angulo;
+            this.ERROR = ERROR;
+            this.angle = angle;
+            exercise_started = true;
         }
 
         public void refresh()
         {
-            bool finish = false;
-            switch (mov)
+            if (exercise_started)
             {
-                case 0:
-                    finish = mov1.isFinished();
-                    break;
-                case 1:
-                    finish = mov5.isFinished();
-                    break;
-                case 2:
-                    finish = mov7.isFinished();
-                    break;
-                case 3:
-                    finish = mov9.isFinished();
-                    break;
-                case 4:
-                    finish = mov10.isFinished();
-                    break;
-            }
-            if (finish)
-            {
-                mov++;
-                if (mov > 4) mov = 0;
+                bool finish = false;
+                finish = m[mov_i].isFinished();
+                if (finish)
+                {
+                    mov_i++;
+                    if (mov_i > 4) mov_i = 0;
+                }
             }
         }
 
         public void setSkeleton(Skeleton s)
         {
-            switch (mov)
-            {
-                case 0:
-                    mov1.setSkeleton(s);
-                    break;
-                case 1:
-                    mov5.setSkeleton(s);
-                    break;
-                case 2:
-                    mov7.setSkeleton(s);
-                    break;
-                case 3:
-                    mov9.setSkeleton(s);
-                    break;
-                case 4:
-                    mov10.setSkeleton(s);
-                    break;
-            }
+            m[mov_i].setSkeleton(s);
         }
 
         public Brush getBrush(Joint joint)
         {
-            Brush b = trackedJointBrush;
-            switch (mov)
-            {
-                case 0:
-                    b = mov1.getBrush(joint);
-                    break;
-                case 1:
-                    b = mov5.getBrush(joint);
-                    break;
-                case 2:
-                    b = mov7.getBrush(joint);
-                    break;
-                case 3:
-                    b = mov9.getBrush(joint);
-                    break;
-                case 4:
-                    b = mov10.getBrush(joint);
-                    break;
-            }
-            return b;
+            return m[mov_i].getBrush(joint);
         }
 
         public Pen getPen(JointType j0, JointType j1)
         {
-            Pen b = trackedBonePen;
-            switch (mov)
-            {
-                case 0:
-                    b = mov1.getPen(j1);
-                    break;
-                case 1:
-                    b = mov5.getPen(j1);
-                    break;
-                case 2:
-                    b = mov7.getPen(j1);
-                    break;
-                case 3:
-                    b = mov9.getPen(j1);
-                    break;
-                case 4:
-                    b = mov10.getPen(j1);
-                    break;
-            }
-            return b;
+            return m[mov_i].getPen(j1);
         }
     }
 }

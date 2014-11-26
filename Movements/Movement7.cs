@@ -18,18 +18,8 @@ namespace NPI_P2
     /// pasado un objeto Skeleton, si los brazos están en posición recta, 
     /// de frente y las manos sin juntarse.
     /// </summary>
-    class Movement7
+    class Movement7 : Movement
     {
-        /// <summary>
-        /// Objeto Skeleton donde se almacena la detección del cuerpo actual.
-        /// </summary>
-        private Skeleton skeleton;
-
-        /// <summary>
-        /// Índice de error.
-        /// </summary>
-        private float ERROR = 0.09F;
-
         /// <summary>
         /// Lista con los JoinType que hay que comprobar para que el movimiento sea el correcto.
         /// </summary>
@@ -42,47 +32,14 @@ namespace NPI_P2
         /// </summary>
         private List<int> diff_positions = new List<int>(new int[jointsTypes.Count]);
 
-        /// <summary>
-        /// Brush used for drawing joints that are currently tracked
-        /// </summary>
-        private readonly Brush trackedJointBrush = new SolidColorBrush(Color.FromArgb(255, 68, 192, 68));
-
-        /// <summary>
-        /// Brush usado para pintar los puntos que son incorrectos y están por debajo.
-        /// </summary>
-        private readonly Brush underPositionJointBrush = Brushes.Yellow;
-
-        /// <summary>
-        /// Brush usado para pintar los puntos que son incorrectos y están por encima.
-        /// </summary>
-        private readonly Brush upPositionJointBrush = Brushes.Turquoise;
-
-        /// <summary>
-        /// Pen used for drawing bones that are currently tracked
-        /// </summary>
-        private readonly Pen trackedBonePen = new Pen(Brushes.Green, 6);
-
-        /// <summary>
-        /// Pen usado para pintar las partes de los brazos que están mal colocadas.
-        /// </summary>
-        private readonly Pen failBonePen = new Pen(Brushes.Red, 6);
-
-        public Movement7() { skeleton = null; }
-
-        public Movement7(Skeleton s) { setSkeleton(s); }
-
-        public bool isFinished()
-        {
-            return false;
-        }
 
         /// <summary>
         /// Inicializa la detección del cuerpo, se reinician los calculos 
         /// con el nuevo valor de Skeleton también.
         /// </summary>
-        public void setSkeleton(Skeleton s)
+        public override void setSkeleton(Skeleton s)
         {
-            skeleton = s;
+            base.setSkeleton(s);
             checkArms();
         }
 
@@ -119,12 +76,15 @@ namespace NPI_P2
             if (skeleton != null)
             {
                 SkeletonPoint p1, p2;
+                finished = true;
                 for (int i = 0; i < 7; i++)
                 {
                     p1 = skeleton.Joints[jointsTypes[i]].Position;
                     p2 = skeleton.Joints[jointsTypes[i + 1]].Position;
 
                     diff_positions[i + 1] = checkPoints(p1, p2);
+                    if (diff_positions[i + 1] != 0)
+                        finished = false;
 
                     if (i == 2)
                         i++;
@@ -135,7 +95,7 @@ namespace NPI_P2
         /// <summary>
         /// Devuelve el objeto Brush con el que pintar la posición del cuerpo Joint.
         /// </summary>
-        public Brush getBrush(Joint joint)
+        public override Brush getBrush(Joint joint)
         {
             if (jointsTypes.Contains(joint.JointType))
             {
@@ -151,7 +111,7 @@ namespace NPI_P2
         /// <summary>
         /// Devuelve el objeto Pen con el que pintar el hueso que se une con la parte del cuerpo JointType.
         /// </summary>
-        public Pen getPen(JointType j)
+        public override Pen getPen(JointType j)
         {
             if (jointsTypes.Contains(j))
             {
