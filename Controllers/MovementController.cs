@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 using Microsoft.Kinect;
+using System.Diagnostics;
 
 namespace NPI_P2
 {
@@ -17,12 +18,17 @@ namespace NPI_P2
         private double ERROR;
         private double angle;
         private bool exercise_started = false;
-
+        private bool exercise_finished = false;
+        private double time;
+        Stopwatch watch;
         public void startExercise(double ERROR, double angle)
         {
             this.ERROR = ERROR;
             this.angle = angle;
             exercise_started = true;
+            exercise_finished = false;
+            time = 0.0;
+            watch = Stopwatch.StartNew();
         }
 
         public void refresh()
@@ -34,9 +40,24 @@ namespace NPI_P2
                 if (finish)
                 {
                     mov_i++;
-                    if (mov_i > 4) mov_i = 0;
+                    if (mov_i > 4)
+                    {
+                        watch.Stop();
+                        time = watch.ElapsedMilliseconds;
+                        exercise_finished = true;
+                    }
                 }
             }
+        }
+
+        public double getTime()
+        {
+            return time;
+        }
+
+        public bool isFinished()
+        {
+            return exercise_finished;
         }
 
         public void setSkeleton(Skeleton s)

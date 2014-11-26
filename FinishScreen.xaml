@@ -1,0 +1,34 @@
+﻿<PageFunction
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:sys="clr-namespace:System;assembly=mscorlib" 
+    x:Class="NPI_P2.FinishScreen"
+    x:TypeArguments="sys:Double"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    Title="FinishScreen">
+    <Page.Triggers>
+        <EventTrigger RoutedEvent="Page.Loaded">
+            <BeginStoryboard>
+                <Storyboard AutoReverse="True" BeginTime="0" >
+                    <DoubleAnimation Storyboard.TargetName="Foo"
+                                     Storyboard.TargetProperty="Offset"
+                                     From="0.2" To="0.8" Duration="0:0:10"/>
+                </Storyboard>
+            </BeginStoryboard>
+        </EventTrigger>
+    </Page.Triggers>
+    <Border>
+        <Border.Background>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Color="Aqua" Offset="0"/>
+                <GradientStop Color="White" Offset="0.2"  x:Name="Foo"/>
+                <GradientStop Color="Aquamarine" Offset="1"/>
+            </LinearGradientBrush>
+        </Border.Background>
+    <Grid>
+            <Button Content="Reiniciar" Grid.Column="0" FontSize="50" Background="AliceBlue" FontFamily="KaiTi"  Height="100" Width="250" HorizontalAlignment="Center" Name="button1" VerticalAlignment="Center" Click="button1_Click" Margin="0,0,300,0" />
+            <TextBox Name="TextFinish" Background="AliceBlue" FontSize="15" FontFamily="KaiTi" VerticalAlignment="Center" HorizontalAlignment="Center" Width="400" Height="150" Margin="500,0,0,0"/>
+        </Grid>
+    </Border>
+</PageFunction>

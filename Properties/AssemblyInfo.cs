@@ -8,10 +8,10 @@ using System.Windows;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("NPI_P2")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Aplicación de Fitness desarrollada para la asignatura NPI")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("NPI_P2")]
+[assembly: AssemblyCompany("Javier Moreno <jmorenov@correo.ugr.es>")]
+[assembly: AssemblyProduct("NPI Fitness")]
 [assembly: AssemblyCopyright("Copyright ©  2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

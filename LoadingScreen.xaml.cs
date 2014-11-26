@@ -15,9 +15,6 @@ using System.Windows.Forms;
 
 namespace NPI_P2
 {
-    /// <summary>
-    /// Lógica de interacción para Page1.xaml
-    /// </summary>
     public partial class LoadingScreen : Page
     {
         public LoadingScreen()

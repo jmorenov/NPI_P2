@@ -54,7 +54,6 @@ namespace NPI_P2
             }
             if (correct)
             {
-                //this.NavigationService.Navigate(new Uri("FitnessScreen.xaml", UriKind.Relative));
                 FitnessScreen FitnessScreen = new FitnessScreen(difficulty);
                 this.NavigationService.Navigate(FitnessScreen);
             }
@@ -68,6 +67,12 @@ namespace NPI_P2
         {
             Regex regex = new Regex("[^0-9]+");
             e.Handled = regex.IsMatch(e.Text);
+        }
+
+        private void About_Click(object sender, RoutedEventArgs e)
+        {
+            About_NPI_Fitness about = new About_NPI_Fitness();
+            about.ShowDialog();
         }
     }
 }

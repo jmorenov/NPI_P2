@@ -36,6 +36,12 @@ namespace NPI_P2
                 ImageSkeleton.Source = kinect.getImageSkeleton();
                 ImageVideo.Source = kinect.getImageSource();
                 kinect.movController.startExercise(difficulty, angle);
+                if (kinect.movController.isFinished())
+                {
+                    double time = kinect.movController.getTime();
+                    FinishScreen FinishScreen = new FinishScreen(time);
+                    this.NavigationService.Navigate(FinishScreen);
+                }
             }
         }
 
