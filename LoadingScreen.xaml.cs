@@ -30,7 +30,7 @@ namespace NPI_P2
         {
             progressbar.Maximum = 10;
             timer1.Tick += new EventHandler(timer1_Tick);
-            timer1.Interval = 100;
+            timer1.Interval = 300;
             timer1.Enabled = true;
             timer1.Start();
         }

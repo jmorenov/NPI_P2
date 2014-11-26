@@ -63,6 +63,10 @@
     <Compile Include="FitnessWindow.xaml.cs">
       <DependentUpon>FitnessWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Movements\Movement1.cs" />
+    <Compile Include="Movements\Movement10.cs" />
+    <Compile Include="Movements\Movement5.cs" />
+    <Compile Include="Movements\Movement9.cs" />
     <Compile Include="WelcomeScreen.xaml.cs">
       <DependentUpon>WelcomeScreen.xaml</DependentUpon>
     </Compile>
