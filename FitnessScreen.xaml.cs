@@ -30,7 +30,7 @@ namespace NPI_P2
         private void PageLoaded(object sender, RoutedEventArgs e)
         {
             if (!kinect.isConnected() || !kinect.start())
-                this.NavigationService.Navigate(new Uri("ErrorScreen.xaml", UriKind.Relative));
+                OnReturn(null);
             else
             {
                 ImageSkeleton.Source = kinect.getImageSkeleton();
