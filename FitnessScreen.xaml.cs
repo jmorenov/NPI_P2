@@ -15,13 +15,16 @@ using System.IO;
 
 namespace NPI_P2
 {
-    public partial class FitnessScreen : PageFunction<String>
+    public partial class FitnessScreen : PageFunction<Double>
     {
         private KinectController kinect = new KinectController();
+        private double difficulty;
+        private double angle = 30;
 
-        public FitnessScreen()
+        public FitnessScreen(double difficulty)
         {
             InitializeComponent();
+            this.difficulty = difficulty;
         }
 
         private void PageLoaded(object sender, RoutedEventArgs e)
@@ -32,8 +35,7 @@ namespace NPI_P2
             {
                 ImageSkeleton.Source = kinect.getImageSkeleton();
                 ImageVideo.Source = kinect.getImageSource();
-                double difficulty = 0.05;
-                kinect.movController.startExercise(difficulty, 60);
+                kinect.movController.startExercise(difficulty, angle);
             }
         }
 

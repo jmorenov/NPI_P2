@@ -44,7 +44,7 @@ namespace NPI_P2
                     int percent = Convert.ToInt32(NumberTextBox.Text);
                     if (percent < 100)
                     {
-                        difficulty = percent / 100;
+                        difficulty = percent / 100.0;
                         correct = true;
                     }
                 }
@@ -54,10 +54,9 @@ namespace NPI_P2
             }
             if (correct)
             {
-                if (kinect.isConnected())
-                    this.NavigationService.Navigate(new Uri("FitnessScreen.xaml", UriKind.Relative));
-                else
-                    this.NavigationService.Navigate(new Uri("ErrorScreen.xaml", UriKind.Relative));
+                //this.NavigationService.Navigate(new Uri("FitnessScreen.xaml", UriKind.Relative));
+                FitnessScreen FitnessScreen = new FitnessScreen(difficulty);
+                this.NavigationService.Navigate(FitnessScreen);
             }
             else
             {

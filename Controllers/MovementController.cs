@@ -15,10 +15,10 @@ namespace NPI_P2
 
         private int mov_i = 0;
         private double ERROR;
-        private float angle;
+        private double angle;
         private bool exercise_started = false;
 
-        public void startExercise(double ERROR, float angle)
+        public void startExercise(double ERROR, double angle)
         {
             this.ERROR = ERROR;
             this.angle = angle;

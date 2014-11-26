@@ -57,9 +57,6 @@
     </ApplicationDefinition>
     <Compile Include="Controllers\KinectController.cs" />
     <Compile Include="Controllers\MovementController.cs" />
-    <Compile Include="ErrorScreen.xaml.cs">
-      <DependentUpon>ErrorScreen.xaml</DependentUpon>
-    </Compile>
     <Compile Include="FitnessScreen.xaml.cs">
       <DependentUpon>FitnessScreen.xaml</DependentUpon>
     </Compile>
@@ -71,10 +68,6 @@
     <Compile Include="WelcomeScreen.xaml.cs">
       <DependentUpon>WelcomeScreen.xaml</DependentUpon>
     </Compile>
-    <Page Include="ErrorScreen.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="FitnessScreen.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
