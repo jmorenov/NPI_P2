@@ -34,6 +34,11 @@ namespace NPI_P2
         /// </summary>
         private readonly Pen trackedBonePen = new Pen(Brushes.Green, 6);
 
+        public bool isFinished()
+        {
+            return false;
+        }
+
         public Movement10() { }
 
         public Movement10(Skeleton s) { setSkeleton(s); }

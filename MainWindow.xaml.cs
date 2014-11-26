@@ -32,8 +32,8 @@ namespace NPI_P2
         private void WindowLoaded(object sender, RoutedEventArgs e)
         {
             //mainFrame.NavigationService.Navigate(new Page1());
-            //mainFrame.Navigate(new LoadingScreen());
-            mainFrame.Navigate(new FitnessScreen());
+            //mainFrame.Navigate(new WelcomeScreen());
+            mainFrame.Navigate(new LoadingScreen());
         }
 
         /// <summary>

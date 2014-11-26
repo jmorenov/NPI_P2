@@ -19,6 +19,8 @@ namespace NPI_P2
         /// </summary>
         private readonly Pen trackedBonePen = new Pen(Brushes.Green, 6);
 
+        private readonly Brush trackedJointBrush = new SolidColorBrush(Color.FromArgb(255, 68, 192, 68));
+
         /// <sumary>
         /// Pen used for drawing bones that are currently tracked and that are in the correct position
         /// </sumary>
@@ -32,6 +34,11 @@ namespace NPI_P2
         public Movement9() { }
 
         public Movement9(Skeleton s) { setSkeleton(s); }
+
+        public bool isFinished()
+        {
+            return false;
+        }
 
         public void setSkeleton(Skeleton s)
         {
@@ -53,6 +60,12 @@ namespace NPI_P2
             }
             return trackedBonePen;
         }*/
+
+        public Brush getBrush(Joint joint)
+        {
+            return trackedJointBrush;
+        }
+
         public Pen getPen(JointType j)
         {
             if (j == JointType.KneeRight || j == JointType.AnkleRight)

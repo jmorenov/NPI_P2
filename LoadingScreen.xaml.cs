@@ -44,7 +44,7 @@ namespace NPI_P2
             else
             {
                 timer1.Stop();
-                this.NavigationService.Navigate(new Uri("FitnessScreen.xaml", UriKind.Relative));
+                this.NavigationService.Navigate(new Uri("WelcomeScreen.xaml", UriKind.Relative));
             }
         }
 

@@ -34,6 +34,11 @@ namespace NPI_P2
 
         public Movement5(Skeleton s) { setSkeleton(s); }
 
+        public bool isFinished()
+        {
+            return false;
+        }
+        
         public void setSkeleton(Skeleton s)
         {
             skeleton = s;

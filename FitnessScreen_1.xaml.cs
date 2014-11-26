@@ -16,41 +16,95 @@ using Microsoft.Kinect;
 
 namespace NPI_P2
 {
-    public class KinectController
+    /// <summary>
+    /// Lógica de interacción para PageFunction1.xaml
+    /// </summary>
+    public partial class FitnessScreen_1 : PageFunction<String>
     {
+        /// <summary>
+        /// Width of output drawing
+        /// </summary>
         private const float RenderWidth = 640.0f;
+
+        /// <summary>
+        /// Height of our output drawing
+        /// </summary>
         private const float RenderHeight = 480.0f;
+
+        /// <summary>
+        /// Thickness of drawn joint lines
+        /// </summary>
         private const double JointThickness = 3;
+
+        /// <summary>
+        /// Thickness of body center ellipse
+        /// </summary>
         private const double BodyCenterThickness = 10;
+
+        /// <summary>
+        /// Thickness of clip edge rectangles
+        /// </summary>
         private const double ClipBoundsThickness = 10;
 
+        /// <summary>
+        /// Brush used to draw skeleton center point
+        /// </summary>
+        private readonly Brush centerPointBrush = Brushes.Blue;
+
+        /// <summary>
+        /// Brush used for drawing joints that are currently inferred
+        /// </summary>        
+        private readonly Brush inferredJointBrush = Brushes.Yellow;
+
+
+        private MovementController controller = new MovementController();
+
+
+        /// <summary>
+        /// Pen used for drawing bones that are currently inferred
+        /// </summary>        
         private readonly Pen inferredBonePen = new Pen(Brushes.Gray, 1);
 
-        private readonly Brush centerPointBrush = Brushes.Blue;
-        private readonly Brush inferredJointBrush = Brushes.Yellow;
-        private readonly Brush trackedJointBrush = new SolidColorBrush(Color.FromArgb(255, 68, 192, 68));
-
+        /// <summary>
+        /// Active Kinect sensor
+        /// </summary>
         private KinectSensor sensor;
 
+        /// <summary>
+        /// Drawing group for skeleton rendering output
+        /// </summary>
         private DrawingGroup drawingGroup;
+
+        /// <summary>
+        /// Drawing image that we will display
+        /// </summary>
         private DrawingImage imageSource;
-        private BitmapSource source;
 
-        private bool connected = false;
-        private bool started = false;
-
-        public MovementController movController = new MovementController();
-
-        public KinectController()
+        public FitnessScreen_1()
         {
-            this.drawingGroup = new DrawingGroup();
-            this.imageSource = new DrawingImage(this.drawingGroup);
-            checkSensors();
+            InitializeComponent();
         }
 
-        private void checkSensors()
+        /// <summary>
+        /// Execute startup tasks
+        /// </summary>
+        /// <param name="sender">object sending the event</param>
+        /// <param name="e">event arguments</param>
+        private void PageLoaded(object sender, RoutedEventArgs e)
         {
-            this.sensor = null;
+            // Create the drawing group we'll use for drawing
+            this.drawingGroup = new DrawingGroup();
+
+            // Create an image source that we can use in our image control
+            this.imageSource = new DrawingImage(this.drawingGroup);
+
+            // Display the drawing using our image control
+            ImageSkeleton.Source = this.imageSource;
+
+            // Look through all sensors and start the first connected one.
+            // This requires that a Kinect is connected at the time of app startup.
+            // To make your app robust against plug/unplug, 
+            // it is recommended to use KinectSensorChooser provided in Microsoft.Kinect.Toolkit (See components in Toolkit Browser).
             foreach (var potentialSensor in KinectSensor.KinectSensors)
             {
                 if (potentialSensor.Status == KinectStatus.Connected)
@@ -59,128 +113,45 @@ namespace NPI_P2
                     break;
                 }
             }
-            connected = false;
-            if (null != this.sensor)
-                connected = true;
-        }
 
-        public bool start()
-        {
-            try
+            if (null != this.sensor)
             {
+                // Turn on the skeleton stream to receive skeleton frames
                 this.sensor.SkeletonStream.Enable();
                 this.sensor.ColorStream.Enable();
+
+                // Add an event handler to be called whenever there is new color frame data
                 this.sensor.SkeletonFrameReady += this.SensorSkeletonFrameReady;
                 this.sensor.ColorFrameReady += this.SensorColorFrameReady;
-                this.sensor.Start();
-                started = true;
+
+                // Start the sensor!
+                try
+                {
+                    this.sensor.Start();
+                }
+                catch (IOException)
+                {
+                    this.sensor = null;
+                }
             }
-            catch (IOException)
+
+            if (null == this.sensor)
             {
-                started = false;
-                this.sensor = null;
+                //this.statusBarText.Text = Properties.Resources.NoKinectReady;
             }
-            return started;
         }
 
-        public bool isStarted()
+        /// <summary>
+        /// Execute shutdown tasks
+        /// </summary>
+        /// <param name="sender">object sending the event</param>
+        /// <param name="e">event arguments</param>
+        private void PageClosing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            return started;
-        }
-
-        public bool isConnected()
-        {
-            return connected;
-        }
-
-        public DrawingImage getImageSkeleton()
-        {
-            return this.imageSource;
-        }
-
-        public BitmapSource getImageSource()
-        {
-            return this.source;
-        }
-
-        public void close()
-        {
+            //Cerrar kinect.
             if (null != this.sensor)
             {
                 this.sensor.Stop();
-                started = false;
-                connected = false;
-            }
-        }
-
-        /// <summary>
-        /// Event handler for Kinect sensor's SkeletonFrameReady event
-        /// </summary>
-        /// <param name="sender">object sending the event</param>
-        /// <param name="e">event arguments</param>
-        private void SensorColorFrameReady(object sender, ColorImageFrameReadyEventArgs e)
-        {
-            bool receivedData = false;
-            byte[] pixelData = null;
-            using (ColorImageFrame CFrame = e.OpenColorImageFrame())
-            {
-                if (CFrame == null)
-                {
-                    pixelData = new byte[CFrame.PixelDataLength];
-                    CFrame.CopyPixelDataTo(pixelData);
-                    receivedData = true;
-                }
-            }
-            if (receivedData)
-                source = BitmapSource.Create(640, 480, 96, 96, PixelFormats.Bgr32, null, pixelData, 640 * 4);
-        }
-
-        /// <summary>
-        /// Event handler for Kinect sensor's SkeletonFrameReady event
-        /// </summary>
-        /// <param name="sender">object sending the event</param>
-        /// <param name="e">event arguments</param>
-        private void SensorSkeletonFrameReady(object sender, SkeletonFrameReadyEventArgs e)
-        {
-            Skeleton[] skeletons = new Skeleton[0];
-
-            using (SkeletonFrame skeletonFrame = e.OpenSkeletonFrame())
-            {
-                if (skeletonFrame != null)
-                {
-                    skeletons = new Skeleton[skeletonFrame.SkeletonArrayLength];
-                    skeletonFrame.CopySkeletonDataTo(skeletons);
-                }
-            }
-
-            using (DrawingContext dc = this.drawingGroup.Open())
-            {
-                dc.DrawRectangle(Brushes.Black, null, new Rect(0.0, 0.0, RenderWidth, RenderHeight));
-
-                if (skeletons.Length != 0)
-                {
-                    foreach (Skeleton skel in skeletons)
-                    {
-                        RenderClippedEdges(skel, dc);
-
-                        if (skel.TrackingState == SkeletonTrackingState.Tracked)
-                        {
-                            movController.setSkeleton(skel);
-                            this.DrawBonesAndJoints(skel, dc);
-                            movController.refresh();
-                        }
-                        else if (skel.TrackingState == SkeletonTrackingState.PositionOnly)
-                        {
-                            dc.DrawEllipse(
-                            this.centerPointBrush,
-                            null,
-                            this.SkeletonPointToScreen(skel.Position),
-                            BodyCenterThickness,
-                            BodyCenterThickness);
-                        }
-                    }
-                }
-                this.drawingGroup.ClipGeometry = new RectangleGeometry(new Rect(0.0, 0.0, RenderWidth, RenderHeight));
             }
         }
 
@@ -221,6 +192,88 @@ namespace NPI_P2
                     Brushes.Red,
                     null,
                     new Rect(RenderWidth - ClipBoundsThickness, 0, ClipBoundsThickness, RenderHeight));
+            }
+        }
+
+        /// <summary>
+        /// Event handler for Kinect sensor's SkeletonFrameReady event
+        /// </summary>
+        /// <param name="sender">object sending the event</param>
+        /// <param name="e">event arguments</param>
+        private void SensorColorFrameReady(object sender, ColorImageFrameReadyEventArgs e)
+        {
+            bool receivedData = false;
+            byte[] pixelData = null;
+            using (ColorImageFrame CFrame = e.OpenColorImageFrame())
+            {
+                if (CFrame == null) 
+                {
+                  // The image processing took too long. More than 2 frames behind.
+                }
+                else 
+                {
+                  pixelData = new byte[CFrame.PixelDataLength];
+                  CFrame.CopyPixelDataTo(pixelData);
+                  receivedData = true;
+                }
+            }
+
+            if (receivedData)
+            {
+                BitmapSource source = BitmapSource.Create(640, 480, 96, 96, PixelFormats.Bgr32, null, pixelData, 640 * 4);
+
+                ImageVideo.Source = source;
+            }
+        }
+
+        /// <summary>
+        /// Event handler for Kinect sensor's SkeletonFrameReady event
+        /// </summary>
+        /// <param name="sender">object sending the event</param>
+        /// <param name="e">event arguments</param>
+        private void SensorSkeletonFrameReady(object sender, SkeletonFrameReadyEventArgs e)
+        {
+            Skeleton[] skeletons = new Skeleton[0];
+
+            using (SkeletonFrame skeletonFrame = e.OpenSkeletonFrame())
+            {
+                if (skeletonFrame != null)
+                {
+                    skeletons = new Skeleton[skeletonFrame.SkeletonArrayLength];
+                    skeletonFrame.CopySkeletonDataTo(skeletons);
+                }
+            }
+
+            using (DrawingContext dc = this.drawingGroup.Open())
+            {
+                // Draw a transparent background to set the render size
+                dc.DrawRectangle(Brushes.Black, null, new Rect(0.0, 0.0, RenderWidth, RenderHeight));
+
+                if (skeletons.Length != 0)
+                {
+                    foreach (Skeleton skel in skeletons)
+                    {
+                        RenderClippedEdges(skel, dc);
+
+                        if (skel.TrackingState == SkeletonTrackingState.Tracked)
+                        {
+                            controller.setSkeleton(skel);
+                            this.DrawBonesAndJoints(skel, dc);
+                        }
+                        else if (skel.TrackingState == SkeletonTrackingState.PositionOnly)
+                        {
+                            dc.DrawEllipse(
+                            this.centerPointBrush,
+                            null,
+                            this.SkeletonPointToScreen(skel.Position),
+                            BodyCenterThickness,
+                            BodyCenterThickness);
+                        }
+                    }
+                }
+
+                // prevent drawing outside of our render area
+                this.drawingGroup.ClipGeometry = new RectangleGeometry(new Rect(0.0, 0.0, RenderWidth, RenderHeight));
             }
         }
 
@@ -267,7 +320,8 @@ namespace NPI_P2
 
                 if (joint.TrackingState == JointTrackingState.Tracked)
                 {
-                    drawBrush = movController.getBrush(joint);
+                    //drawBrush = this.trackedJointBrush;
+                    drawBrush = controller.getBrush(joint);
                 }
                 else if (joint.TrackingState == JointTrackingState.Inferred)
                 {
@@ -324,7 +378,8 @@ namespace NPI_P2
             Pen drawPen = this.inferredBonePen;
             if (joint0.TrackingState == JointTrackingState.Tracked && joint1.TrackingState == JointTrackingState.Tracked)
             {
-                drawPen = movController.getPen(jointType0, jointType1);
+                //drawPen = this.trackedBonePen;
+                drawPen = controller.getPen(jointType0, jointType1);
             }
 
             drawingContext.DrawLine(drawPen, this.SkeletonPointToScreen(joint0.Position), this.SkeletonPointToScreen(joint1.Position));

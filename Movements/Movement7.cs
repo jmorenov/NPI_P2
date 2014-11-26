@@ -18,7 +18,7 @@ namespace NPI_P2
     /// pasado un objeto Skeleton, si los brazos están en posición recta, 
     /// de frente y las manos sin juntarse.
     /// </summary>
-    class Movimiento7
+    class Movement7
     {
         /// <summary>
         /// Objeto Skeleton donde se almacena la detección del cuerpo actual.
@@ -67,9 +67,14 @@ namespace NPI_P2
         /// </summary>
         private readonly Pen failBonePen = new Pen(Brushes.Red, 6);
 
-        public Movimiento7() { skeleton = null; }
+        public Movement7() { skeleton = null; }
 
-        public Movimiento7(Skeleton s) { setSkeleton(s); }
+        public Movement7(Skeleton s) { setSkeleton(s); }
+
+        public bool isFinished()
+        {
+            return false;
+        }
 
         /// <summary>
         /// Inicializa la detección del cuerpo, se reinician los calculos 

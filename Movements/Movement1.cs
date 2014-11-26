@@ -17,6 +17,8 @@ namespace NPI_P2
         private readonly Pen incorrectMove = new Pen(Brushes.Red, 5);
         private readonly Pen closeToMove = new Pen(Brushes.Yellow, 5);
 
+        private readonly Brush trackedJointBrush = new SolidColorBrush(Color.FromArgb(255, 68, 192, 68));
+
         public Movement1() { }
 
         public Movement1(Skeleton s) { setSkeleton(s); }
@@ -24,6 +26,16 @@ namespace NPI_P2
         public void setSkeleton(Skeleton s)
         {
             skeleton = s;
+        }
+
+        public bool isFinished()
+        {
+            return false;
+        }
+
+        public Brush getBrush(Joint joint)
+        {
+            return trackedJointBrush;
         }
 
         /// <summary>

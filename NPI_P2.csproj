@@ -57,8 +57,14 @@
     </ApplicationDefinition>
     <Compile Include="Controllers\KinectController.cs" />
     <Compile Include="Controllers\MovementController.cs" />
+    <Compile Include="ErrorScreen.xaml.cs">
+      <DependentUpon>ErrorScreen.xaml</DependentUpon>
+    </Compile>
     <Compile Include="FitnessScreen.xaml.cs">
       <DependentUpon>FitnessScreen.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="FitnessScreen_1.xaml.cs">
+      <DependentUpon>FitnessScreen_1.xaml</DependentUpon>
     </Compile>
     <Compile Include="FitnessWindow.xaml.cs">
       <DependentUpon>FitnessWindow.xaml</DependentUpon>
@@ -70,7 +76,15 @@
     <Compile Include="WelcomeScreen.xaml.cs">
       <DependentUpon>WelcomeScreen.xaml</DependentUpon>
     </Compile>
+    <Page Include="ErrorScreen.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="FitnessScreen.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="FitnessScreen_1.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -103,7 +117,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Movements\Movimiento7.cs" />
+    <Compile Include="Movements\Movement7.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
