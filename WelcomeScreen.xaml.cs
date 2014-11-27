@@ -17,13 +17,24 @@ namespace NPI_P2
 {
     public partial class WelcomeScreen : Page
     {
+        /// <summary>
+        /// Controlador del Kinect.
+        /// </summary>
         private KinectController kinect = new KinectController();
+
+        /// <summary>
+        /// Argumento de porcentaje de error con el que se realizará el ejercicio.
+        /// </summary>
         private double difficulty;
+
         public WelcomeScreen()
         {
             InitializeComponent();
         }
 
+        /// <summary>
+        /// Comprueba si el kinect está conectado, si no lo está se define un mensaje de error y se termina la aplicación.
+        /// </summary>
         private void PageLoaded(object sender, RoutedEventArgs e)
         {
             if (!kinect.isConnected())
@@ -34,6 +45,9 @@ namespace NPI_P2
             }
         }
 
+        /// <summary>
+        /// Función que controla el Click del botón Iniciar. Comprueba que el valor del porcentaje de error sea correcto.
+        /// </summary>
         private void button1_Click(object sender, RoutedEventArgs e)
         {
             bool correct = false;
@@ -63,12 +77,18 @@ namespace NPI_P2
             }
         }
 
+        /// <summary>
+        /// Comprobación sintáctica del valor del porcentaje de error.
+        /// </summary>
         private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
         {
             Regex regex = new Regex("[^0-9]+");
             e.Handled = regex.IsMatch(e.Text);
         }
 
+        /// <summary>
+        /// Controla el Click del botón About y llama al cuadro de diálogo de About_NPI_Fitness.
+        /// </summary>
         private void About_Click(object sender, RoutedEventArgs e)
         {
             About_NPI_Fitness about = new About_NPI_Fitness();

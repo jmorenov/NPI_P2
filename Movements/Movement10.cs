@@ -9,6 +9,12 @@ using System.Windows.Media;
 
 namespace NPI_P2
 {
+    /// <summary>
+    /// Clase Movement10 basada en el movimiento 10 desarrollado por: https://github.com/JMNM/Practica_1_pos10
+    /// 
+    /// Movimiento: En pie con rodilla izquierda levantada (plano XZ) y brazos en cruz. El ángulo de la pierna debe ser un parámetro de entrada.
+    /// 
+    /// </summary>
     class Movement10 : Movement
     {
         private Pen drawPen;

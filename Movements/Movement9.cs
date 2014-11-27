@@ -9,6 +9,12 @@ using System.Windows.Media;
 
 namespace NPI_P2
 {
+    /// <summary>
+    /// Clase Movement9 basada en el movimiento 9 desarrollado por: https://github.com/ToskoKozlov/Kinect_Project/blob/master/MainWindow.xaml.cs
+    /// 
+    /// Movimiento: En pie con rodilla derecha levantada (plano XZ) y brazos en cruz. El ángulo de la pierna debe ser un parámetro de entrada.
+    /// 
+    /// </summary>
     class Movement9 : Movement
     {
         private Pen drawPen;

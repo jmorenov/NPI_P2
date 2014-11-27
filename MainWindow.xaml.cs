@@ -14,9 +14,6 @@ using System.Windows.Shapes;
 
 namespace NPI_P2
 {
-    /// <summary>
-    /// Lógica de interacción para MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
         public MainWindow()
@@ -25,22 +22,13 @@ namespace NPI_P2
         }
 
         /// <summary>
-        /// Execute startup tasks
+        /// Inicio de la aplicación. mainFrame se inicializa con la página LoadingScreen.
         /// </summary>
-        /// <param name="sender">object sending the event</param>
-        /// <param name="e">event arguments</param>
         private void WindowLoaded(object sender, RoutedEventArgs e)
         {
-            //mainFrame.NavigationService.Navigate(new Page1());
-            //mainFrame.Navigate(new WelcomeScreen());
             mainFrame.Navigate(new LoadingScreen());
         }
 
-        /// <summary>
-        /// Execute shutdown tasks
-        /// </summary>
-        /// <param name="sender">object sending the event</param>
-        /// <param name="e">event arguments</param>
         private void WindowClosing(object sender, System.ComponentModel.CancelEventArgs e)
         {
 

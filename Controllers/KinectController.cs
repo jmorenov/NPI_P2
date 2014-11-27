@@ -16,31 +16,60 @@ using Microsoft.Kinect;
 
 namespace NPI_P2
 {
+    /// <summary>
+    /// Clase que controla el Kinect con todos los métodos necesarios de 
+    /// inicialiación, finalización, pintado de pantalla, ...
+    /// </summary>
     public class KinectController
     {
+        /// <summary>
+        /// Variables de la clase.
+        /// </summary>
         private const float RenderWidth = 640.0f;
         private const float RenderHeight = 480.0f;
         private const double JointThickness = 3;
         private const double BodyCenterThickness = 10;
         private const double ClipBoundsThickness = 10;
 
+        /// <summary>
+        /// Objeto Pen con el que pintar los huesos inferidos.
+        /// </summary>
         private readonly Pen inferredBonePen = new Pen(Brushes.Gray, 1);
 
+        /// <summary>
+        /// Objetos Brush para el pintado de Joint.
+        /// </summary>
         private readonly Brush centerPointBrush = Brushes.Blue;
         private readonly Brush inferredJointBrush = Brushes.Yellow;
         private readonly Brush trackedJointBrush = new SolidColorBrush(Color.FromArgb(255, 68, 192, 68));
 
+        /// <summary>
+        /// Sensor del Kinect.
+        /// </summary>
         private KinectSensor sensor;
 
+        /// <summary>
+        /// Objetos para el pintado de la pantalla.
+        /// </summary>
         private DrawingGroup drawingGroup;
         private DrawingImage imageSource;
         private BitmapSource source;
 
+        /// <summary>
+        /// Variables de control de la ejecución del Kinect.
+        /// </summary>
         private bool connected = false;
         private bool started = false;
 
+        /// <summary>
+        /// Controlador de los Movimientos.
+        /// </summary>
         public MovementController movController = new MovementController();
 
+        /// <summary>
+        /// Constructor en el que se definen los objetos para pintar 
+        /// en pantalla y se comprueban los sensores.
+        /// </summary>
         public KinectController()
         {
             this.drawingGroup = new DrawingGroup();
@@ -48,6 +77,9 @@ namespace NPI_P2
             checkSensors();
         }
 
+        /// <summary>
+        /// Comprobación de los sensores.s
+        /// </summary>
         private void checkSensors()
         {
             this.sensor = null;
@@ -64,6 +96,9 @@ namespace NPI_P2
                 connected = true;
         }
 
+        /// <summary>
+        /// Inicio del Kinect.
+        /// </summary>
         public bool start()
         {
             try
@@ -83,26 +118,41 @@ namespace NPI_P2
             return started;
         }
 
+        /// <summary>
+        /// Devuelve si el Kinect está iniciado.
+        /// </summary>
         public bool isStarted()
         {
             return started;
         }
 
+        /// <summary>
+        /// Devuelve si el Kinect está conectado.
+        /// </summary>
         public bool isConnected()
         {
             return connected;
         }
 
+        /// <summary>
+        /// Devuelve la imagen de Skeleton que vamos a pintar en pantalla.
+        /// </summary>
         public DrawingImage getImageSkeleton()
         {
             return this.imageSource;
         }
 
+        /// <summary>
+        /// Devuelve la imagen de Image Stream que vamos a pintar en pantalla.
+        /// </summary>
         public BitmapSource getImageSource()
         {
             return this.source;
         }
 
+        /// <summary>
+        /// Finaliza la ejecución del Kinect.
+        /// </summary>
         public void close()
         {
             if (null != this.sensor)
@@ -168,7 +218,7 @@ namespace NPI_P2
                             movController.setSkeleton(skel);
                             this.DrawBonesAndJoints(skel, dc);
                             movController.refresh();
-                            //Mensaje ejercicio finalizado.
+                            //Falta mensaje ejercicio finalizado.
                         }
                         else if (skel.TrackingState == SkeletonTrackingState.PositionOnly)
                         {

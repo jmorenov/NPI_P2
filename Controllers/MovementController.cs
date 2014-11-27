@@ -10,10 +10,21 @@ using System.Diagnostics;
 
 namespace NPI_P2
 {
+    /// <summary>
+    /// Clase que controla los movimientos con todos los métodos necesarios de inicialización, 
+    /// finalización y consecución.
+    /// </summary>
     public class MovementController
     {
-        private List<Movement> m = new List<Movement>{new Movement1(), new Movement5(), new Movement7(), new Movement9(), new Movement10()};
+        /// <summary>
+        /// Lista de movimientos a realizar.
+        /// </summary>
+        private List<Movement> m = new List<Movement>{new Movement1(), new Movement5(), new Movement7(), 
+                                                        new Movement9(), new Movement10()};
 
+        /// <summary>
+        /// Variables de la clase.
+        /// </summary>
         private int mov_i = 0;
         private double ERROR;
         private double angle;
@@ -21,6 +32,11 @@ namespace NPI_P2
         private bool exercise_finished = false;
         private double time;
         Stopwatch watch;
+
+        /// <summary>
+        /// Inicio del ejercicio con el valor de porcentaje de error y ángulo. 
+        /// También se inicia el cronómetro para almacenar el tiempo de realización del ejercicio.
+        /// </summary>
         public void startExercise(double ERROR, double angle)
         {
             this.ERROR = ERROR;
@@ -31,6 +47,9 @@ namespace NPI_P2
             watch = Stopwatch.StartNew();
         }
 
+        /// <summary>
+        /// Comprueba si el movimiento ha finalizado para pasar al siguiente, o si han terminado todos los movimientos.
+        /// </summary>
         public void refresh()
         {
             if (exercise_started)
@@ -50,26 +69,41 @@ namespace NPI_P2
             }
         }
 
+        /// <summary>
+        /// Devuelve el tiempo de realización del ejercicio.
+        /// </summary>
         public double getTime()
         {
             return time;
         }
 
+        /// <summary>
+        /// Devuelve si ha terminado el ejercicio.
+        /// </summary>
         public bool isFinished()
         {
             return exercise_finished;
         }
 
+        /// <summary>
+        /// Almacena el objeto Skeleton con el que trabajar en los movimientos.
+        /// </summary>
         public void setSkeleton(Skeleton s)
         {
             m[mov_i].setSkeleton(s);
         }
 
+        /// <summary>
+        /// Devuelve el objeto Brush con el que pintar el Joint joint.
+        /// </summary>
         public Brush getBrush(Joint joint)
         {
             return m[mov_i].getBrush(joint);
         }
 
+        /// <summary>
+        /// Devuelve el objeto Pen con el que pintar la unión entre los JointType j0 y j1.
+        /// </summary>
         public Pen getPen(JointType j0, JointType j1)
         {
             return m[mov_i].getPen(j1);

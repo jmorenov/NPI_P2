@@ -7,13 +7,13 @@ using Microsoft.Kinect;
 using System.Windows;
 using System.Windows.Media;
 
-/// <summary>
-/// Movimiento 7 NPI.
-/// </summary>
-
 namespace NPI_P2
 {
     /// <summary>
+    /// Clase Movement7 basada en el movimiento 7 desarrollado por: https://github.com/jmorenov/SkeletonBasics-WPF-Mov7
+    /// 
+    /// Movimiento: Mover los brazos rectos al frente, las manos no deben estar juntas.
+    /// 
     /// Clase que realiza los cálculos necesarios para comprobar, 
     /// pasado un objeto Skeleton, si los brazos están en posición recta, 
     /// de frente y las manos sin juntarse.

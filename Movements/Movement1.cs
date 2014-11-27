@@ -9,6 +9,12 @@ using System.Windows.Media;
 
 namespace NPI_P2
 {
+    /// <summary>
+    /// Clase Movement1 basada en el movimiento 1 desarrollado por: https://github.com/CarlaSimoes/SkeletonBasics-WPF-Mov1
+    /// 
+    /// Movimiento: En pie con las manos en reposo, cabeza recta y los pies juntos. Igual pero con los pies separados un ángulo que se establezca.
+    /// 
+    /// </summary>
     class Movement1 : Movement
     {
         private readonly Pen correctMove = new Pen(Brushes.Green, 5);

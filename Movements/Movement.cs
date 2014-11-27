@@ -9,6 +9,9 @@ using Microsoft.Kinect;
 
 namespace NPI_P2
 {
+    /// <summary>
+    /// Clase abstract en la que se basan los diferentes Movimientos.
+    /// </summary>
     public abstract class Movement
     {
         /// <summary>
@@ -38,48 +41,78 @@ namespace NPI_P2
         protected readonly Pen failBonePen = new Pen(Brushes.Red, 6);
         protected readonly Pen inferredBonePen = new Pen(Brushes.Gray, 1);
 
+        /// <summary>
+        /// Variable de control para la finalización del movimiento.
+        /// </summary>
         protected bool finished = true;
 
+        /// <summary>
+        /// Constructor por defecto.
+        /// </summary>
         public Movement()
         {
             skeleton = null;
         }
 
+        /// <summary>
+        /// Constructor que define el objeto Skeleton a usar.
+        /// </summary>
         public Movement(Skeleton s)
         {
             setSkeleton(s);
         }
 
+        /// <summary>
+        /// Almacena el objeto Skeleton a usar.
+        /// </summary>
         public virtual void setSkeleton(Skeleton s)
         {
             skeleton = s;
         }
 
+        /// <summary>
+        /// Comprueba si el movimiento ha finalizado.
+        /// </summary>
         public virtual bool isFinished()
         {
             return finished;
         }
 
+        /// <summary>
+        /// Devuelve el objeto Brush con el que pintar el Joint joint.
+        /// </summary>
         public virtual Brush getBrush(Joint joint)
         {
             return trackedJointBrush;
         }
 
+        /// <summary>
+        /// Devuelve el objeto Pen con el que pintar la unión entre un JointType y el JointType j.
+        /// </summary>
         public virtual Pen getPen(JointType j)
         {
             return trackedBonePen;
         }
 
+        /// <summary>
+        /// Define el ángulo a usar en el movimiento.
+        /// </summary>
         public virtual void setAngle(double a)
         {
             angle = a;
         }
 
+        /// <summary>
+        /// Define el porcentaje de error del movimiento.
+        /// </summary>
         public virtual void setError(float e)
         {
             ERROR = e;
         }
 
+        /// <summary>
+        /// Define el porcentaje de error sobre 100 del movimiento.
+        /// </summary>
         public virtual void setErrorPercent(float e)
         {
             ERROR_PERCENT = e;

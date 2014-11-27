@@ -17,16 +17,29 @@ namespace NPI_P2
 {
     public partial class FitnessScreen : PageFunction<Double>
     {
+        /// <summary>
+        /// Controlador del Kinect.
+        /// </summary>
         private KinectController kinect = new KinectController();
+
+        /// <summary>
+        /// Valores de porcentaje de error y ángulo.
+        /// </summary>
         private double difficulty;
         private double angle = 30;
 
+        /// <summary>
+        /// Constructor de la página en el que se recibe el porcentaje de error.
+        /// </summary>
         public FitnessScreen(double difficulty)
         {
             InitializeComponent();
             this.difficulty = difficulty;
         }
 
+        /// <summary>
+        /// Comprueba si está conectado el Kinect y lo inicia. Inicia el ejercicio y cuando termina llama a la página FinishScreen.
+        /// </summary>
         private void PageLoaded(object sender, RoutedEventArgs e)
         {
             if (!kinect.isConnected() || !kinect.start())
@@ -45,6 +58,9 @@ namespace NPI_P2
             }
         }
 
+        /// <summary>
+        /// Detiene la ejecución del Kinect.
+        /// </summary>
         private void PageClosing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             if (kinect.isConnected() && kinect.isStarted())

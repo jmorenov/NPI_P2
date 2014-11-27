@@ -9,6 +9,12 @@ using System.Windows.Media;
 
 namespace NPI_P2
 {
+    /// <summary>
+    /// Clase Movement5 basada en el movimiento 5 desarrollado por: https://github.com/AdriMedina/Practica1-NPI/tree/master/SkeletonBasics-WPF
+    /// 
+    /// Movimiento: Igual movimiento 1, con los brazos sobre la cabeza. Las manos no deben estar juntas, los brazos rectos sobre la cabeza.
+    /// 
+    /// </summary>
     class Movement5 : Movement
     {
         private readonly Pen huesosOK = new Pen(Brushes.Green, 6);

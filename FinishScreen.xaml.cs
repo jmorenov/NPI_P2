@@ -17,12 +17,18 @@ namespace NPI_P2
 {
     public partial class FinishScreen : PageFunction<Double>
     {
+        /// <summary>
+        /// Constructor de la página que recibe como argumento el tiempo de ejecución del ejercicio.
+        /// </summary>
         public FinishScreen(double time)
         {
             InitializeComponent();
             TextFinish.Text = "Ejercicio acabado con éxito.\nTiempo empleado en la realización: " + time + " segundos.";
         }
 
+        /// <summary>
+        /// Controla el Click del botón Reiniciar y llama a la página WelcomeScreen.
+        /// </summary>
         private void button1_Click(object sender, RoutedEventArgs e)
         {
             this.NavigationService.Navigate(new Uri("WelcomeScreen.xaml", UriKind.Relative));
