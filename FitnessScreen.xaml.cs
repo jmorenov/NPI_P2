@@ -51,8 +51,9 @@ namespace NPI_P2
                 kinect.movController.startExercise(difficulty, angle);
                 if (kinect.movController.isFinished())
                 {
+                    double record = kinect.movController.getRecord();
                     double time = kinect.movController.getTime();
-                    FinishScreen FinishScreen = new FinishScreen(time);
+                    FinishScreen FinishScreen = new FinishScreen(time, difficulty, record);
                     this.NavigationService.Navigate(FinishScreen);
                 }
             }

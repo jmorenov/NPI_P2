@@ -31,6 +31,7 @@ namespace NPI_P2
         private bool exercise_started = false;
         private bool exercise_finished = false;
         private double time;
+        private double record;
         Stopwatch watch;
 
         /// <summary>
@@ -43,6 +44,8 @@ namespace NPI_P2
             this.angle = angle;
             exercise_started = true;
             exercise_finished = false;
+            m[mov_i].setAngle(angle);
+            m[mov_i].setErrorPercent((float)ERROR);
             time = 0.0;
             watch = Stopwatch.StartNew();
         }
@@ -63,6 +66,7 @@ namespace NPI_P2
                     {
                         watch.Stop();
                         time = watch.ElapsedMilliseconds;
+                        record = time / ERROR;
                         exercise_finished = true;
                     }
                 }
@@ -83,6 +87,12 @@ namespace NPI_P2
         public bool isFinished()
         {
             return exercise_finished;
+        }
+
+        public double getRecord()
+        {
+
+            return record;
         }
 
         /// <summary>

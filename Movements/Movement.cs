@@ -116,6 +116,7 @@ namespace NPI_P2
         public virtual void setErrorPercent(float e)
         {
             ERROR_PERCENT = e;
+            ERROR = ERROR_PERCENT / 100;
         }
 
     }

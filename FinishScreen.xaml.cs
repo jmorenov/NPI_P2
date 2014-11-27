@@ -20,10 +20,10 @@ namespace NPI_P2
         /// <summary>
         /// Constructor de la página que recibe como argumento el tiempo de ejecución del ejercicio.
         /// </summary>
-        public FinishScreen(double time)
+        public FinishScreen(double time, double difficulty, double record)
         {
             InitializeComponent();
-            TextFinish.Text = "Ejercicio acabado con éxito.\nTiempo empleado en la realización: " + time + " segundos.";
+            TextFinish.Text = "Ejercicio acabado con éxito.\nDificultad: "+ difficulty + ".\nTiempo empleado en la realización: " + time + " segundos.\nPuntuación: "+ record +".";
         }
 
         /// <summary>
