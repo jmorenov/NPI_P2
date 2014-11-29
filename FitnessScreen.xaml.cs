@@ -12,6 +12,10 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.IO;
+using System.ComponentModel;
+using Microsoft.Kinect;
+using System.Threading;
+using System.Windows.Forms;
 
 namespace NPI_P2
 {
@@ -28,6 +32,8 @@ namespace NPI_P2
         private double difficulty;
         private double angle = 30;
 
+        private Thread thread;
+
         /// <summary>
         /// Constructor de la página en el que se recibe el porcentaje de error.
         /// </summary>
@@ -35,6 +41,7 @@ namespace NPI_P2
         {
             InitializeComponent();
             this.difficulty = difficulty;
+            thread = new Thread(new ThreadStart(controlKinect));
         }
 
         /// <summary>
@@ -46,26 +53,45 @@ namespace NPI_P2
                 OnReturn(null);
             else
             {
-                ImageSkeleton.Source = kinect.getImageSkeleton();
-                ImageVideo.Source = kinect.getImageSource();
+                kinect.setImageSkeleton(ref ImageSkeleton);
+                kinect.setImageSource(ref ImageVideo);
+                thread.Start();
+            }
+        }
+
+        private void controlKinect()
+        {
                 kinect.movController.startExercise(difficulty, angle);
+                while (!kinect.movController.isFinished())
+                { }
                 if (kinect.movController.isFinished())
                 {
                     double record = kinect.movController.getRecord();
                     double time = kinect.movController.getTime();
-                    FinishScreen FinishScreen = new FinishScreen(time, difficulty, record);
-                    this.NavigationService.Navigate(FinishScreen);
+                    this.Dispatcher.Invoke(new FinMovement(OnMovementComplete), time, difficulty, record);
                 }
-            }
+        }
+
+        public delegate void FinMovement(double time, double difficulty, double record);
+
+        private void OnMovementComplete(double time, double difficulty, double record)
+        {
+            thread.Abort();
+            FinishScreen FinishScreen = new FinishScreen(time, difficulty, record);
+            this.NavigationService.Navigate(FinishScreen);
         }
 
         /// <summary>
         /// Detiene la ejecución del Kinect.
         /// </summary>
-        private void PageClosing(object sender, System.ComponentModel.CancelEventArgs e)
+        ~FitnessScreen()
         {
             if (kinect.isConnected() && kinect.isStarted())
                 kinect.close();
+            if (thread != null && (thread.IsAlive || thread.IsBackground))
+            {
+                thread.Abort();
+            }
         }
     }
 }

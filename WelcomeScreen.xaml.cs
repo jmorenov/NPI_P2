@@ -37,7 +37,7 @@ namespace NPI_P2
         /// </summary>
         private void PageLoaded(object sender, RoutedEventArgs e)
         {
-            if (!kinect.isConnected())
+           if (!kinect.isConnected())
             {
                 button1.Visibility = System.Windows.Visibility.Hidden;
                 NumberTextBox.Visibility = System.Windows.Visibility.Hidden;

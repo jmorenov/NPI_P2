@@ -31,7 +31,6 @@ namespace NPI_P2
 
         private void WindowClosing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-
         }
     }
 }

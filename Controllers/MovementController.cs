@@ -19,7 +19,7 @@ namespace NPI_P2
         /// <summary>
         /// Lista de movimientos a realizar.
         /// </summary>
-        private List<Movement> m = new List<Movement>{new Movement1(), new Movement5(), new Movement7(), 
+        private List<Movement> m = new List<Movement>{new Movement1(), new Movement5(), 
                                                         new Movement9(), new Movement10()};
 
         /// <summary>
@@ -62,7 +62,7 @@ namespace NPI_P2
                 if (finish)
                 {
                     mov_i++;
-                    if (mov_i > 4)
+                    if (mov_i >= m.Count)
                     {
                         watch.Stop();
                         time = watch.ElapsedMilliseconds;

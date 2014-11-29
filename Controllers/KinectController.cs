@@ -13,6 +13,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.IO;
 using Microsoft.Kinect;
+using System.Windows.Forms;
 
 namespace NPI_P2
 {
@@ -55,11 +56,18 @@ namespace NPI_P2
         private DrawingImage imageSource;
         private BitmapSource source;
 
+        private Image image;
+
         /// <summary>
         /// Variables de control de la ejecución del Kinect.
         /// </summary>
         private bool connected = false;
         private bool started = false;
+
+        private bool WriteText = false;
+        private string TextToWrite = "";
+
+        private Timer timer = new Timer();
 
         /// <summary>
         /// Controlador de los Movimientos.
@@ -72,8 +80,6 @@ namespace NPI_P2
         /// </summary>
         public KinectController()
         {
-            this.drawingGroup = new DrawingGroup();
-            this.imageSource = new DrawingImage(this.drawingGroup);
             checkSensors();
         }
 
@@ -105,9 +111,11 @@ namespace NPI_P2
             {
                 this.sensor.SkeletonStream.Enable();
                 this.sensor.ColorStream.Enable();
-                this.sensor.SkeletonFrameReady += this.SensorSkeletonFrameReady;
-                this.sensor.ColorFrameReady += this.SensorColorFrameReady;
+                this.sensor.SkeletonFrameReady += SensorSkeletonFrameReady;
+                this.sensor.ColorFrameReady += SensorColorFrameReady;
                 this.sensor.Start();
+                this.drawingGroup = new DrawingGroup();
+                this.imageSource = new DrawingImage(this.drawingGroup);
                 started = true;
             }
             catch (IOException)
@@ -137,17 +145,17 @@ namespace NPI_P2
         /// <summary>
         /// Devuelve la imagen de Skeleton que vamos a pintar en pantalla.
         /// </summary>
-        public DrawingImage getImageSkeleton()
+        public void setImageSkeleton(ref Image img)
         {
-            return this.imageSource;
+            img.Source = this.imageSource;
         }
 
         /// <summary>
         /// Devuelve la imagen de Image Stream que vamos a pintar en pantalla.
         /// </summary>
-        public BitmapSource getImageSource()
+        public void setImageSource(ref Image img)
         {
-            return this.source;
+            image = img;
         }
 
         /// <summary>
@@ -174,15 +182,71 @@ namespace NPI_P2
             byte[] pixelData = null;
             using (ColorImageFrame CFrame = e.OpenColorImageFrame())
             {
-                if (CFrame == null)
+                if (CFrame != null)
                 {
                     pixelData = new byte[CFrame.PixelDataLength];
                     CFrame.CopyPixelDataTo(pixelData);
                     receivedData = true;
                 }
             }
+
             if (receivedData)
+            {
                 source = BitmapSource.Create(640, 480, 96, 96, PixelFormats.Bgr32, null, pixelData, 640 * 4);
+
+                if (WriteText)
+                {
+                    System.Drawing.Bitmap bmp = BitmapFromSource(source);
+                    using (System.Drawing.Graphics g = System.Drawing.Graphics.FromImage(bmp))
+                    {
+                        g.DrawString(TextToWrite, new System.Drawing.Font("Tahoma", 20), System.Drawing.Brushes.Red, new System.Drawing.PointF(3, 3));
+                        g.Flush();
+                    }
+                    source = ConvertBitmap(bmp);
+                }
+                image.Source = source;
+            }
+        }
+
+        private System.Drawing.Bitmap BitmapFromSource(BitmapSource bitmapsource)
+        {
+            System.Drawing.Bitmap bitmap;
+            using (MemoryStream outStream = new MemoryStream())
+            {
+                BitmapEncoder enc = new BmpBitmapEncoder();
+                enc.Frames.Add(BitmapFrame.Create(bitmapsource));
+                enc.Save(outStream);
+                bitmap = new System.Drawing.Bitmap(outStream);
+            }
+            return bitmap;
+        }
+
+        public static BitmapSource ConvertBitmap(System.Drawing.Bitmap source)
+        {
+            return System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(
+                          source.GetHbitmap(),
+                          IntPtr.Zero,
+                          Int32Rect.Empty,
+                          BitmapSizeOptions.FromEmptyOptions());
+        }
+
+        private System.Drawing.Bitmap GetBitmap(BitmapSource source)
+        {
+            System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(
+                  source.PixelWidth,
+                  source.PixelHeight,
+                  System.Drawing.Imaging.PixelFormat.Format32bppPArgb);
+                  System.Drawing.Imaging.BitmapData data = bmp.LockBits(
+                  new System.Drawing.Rectangle(System.Drawing.Point.Empty, bmp.Size),
+                  System.Drawing.Imaging.ImageLockMode.WriteOnly,
+                  System.Drawing.Imaging.PixelFormat.Format32bppPArgb);
+                source.CopyPixels(
+                  Int32Rect.Empty,
+                  data.Scan0,
+                  data.Height * data.Stride,
+                  data.Stride);
+                bmp.UnlockBits(data);
+            return bmp;
         }
 
         /// <summary>
@@ -192,6 +256,8 @@ namespace NPI_P2
         /// <param name="e">event arguments</param>
         private void SensorSkeletonFrameReady(object sender, SkeletonFrameReadyEventArgs e)
         {
+            if (movController.isFinished())
+                return;
             Skeleton[] skeletons = new Skeleton[0];
 
             using (SkeletonFrame skeletonFrame = e.OpenSkeletonFrame())
