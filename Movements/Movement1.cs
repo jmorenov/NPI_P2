@@ -17,7 +17,7 @@ namespace NPI_P2
     /// </summary>
     class Movement1 : Movement
     {
-        private readonly Pen correctMove = new Pen(Brushes.Green, 5);
+        private readonly Pen correctMove = new Pen(Brushes.Green, 6);
         private readonly Pen incorrectMove = new Pen(Brushes.Red, 5);
         private readonly Pen closeToMove = new Pen(Brushes.Yellow, 5);
 

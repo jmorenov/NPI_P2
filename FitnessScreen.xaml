@@ -10,7 +10,7 @@
     Title="NPI Fitness">
 
     <Grid Name="layoutGrid" Background="Black">
-        <Image x:FieldModifier="public" Name="ImageSkeleton" HorizontalAlignment="Right" VerticalAlignment="Top"/>
-        <Image Name="ImageVideo" HorizontalAlignment="Left"/>
+        <Image x:FieldModifier="public" Name="ImageSkeleton" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <!--<Image Name="ImageVideo" HorizontalAlignment="Left"/>-->
     </Grid>
 </PageFunction>

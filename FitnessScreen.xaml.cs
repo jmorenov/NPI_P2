@@ -54,7 +54,7 @@ namespace NPI_P2
             else
             {
                 kinect.setImageSkeleton(ref ImageSkeleton);
-                kinect.setImageSource(ref ImageVideo);
+                //kinect.setImageSource(ref ImageVideo);
                 thread.Start();
             }
         }
@@ -88,10 +88,10 @@ namespace NPI_P2
         {
             if (kinect.isConnected() && kinect.isStarted())
                 kinect.close();
-            if (thread != null && (thread.IsAlive || thread.IsBackground))
+            /*if (thread != null && (thread.IsAlive || thread.IsBackground))
             {
                 thread.Abort();
-            }
+            }*/
         }
     }
 }

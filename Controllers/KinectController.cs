@@ -204,7 +204,7 @@ namespace NPI_P2
                     }
                     source = ConvertBitmap(bmp);
                 }
-                image.Source = source;
+                //image.Source = source;
             }
         }
 
@@ -270,9 +270,10 @@ namespace NPI_P2
             }
 
             using (DrawingContext dc = this.drawingGroup.Open())
+            //using (DrawingContext dc = System.Drawing.Graphics.FromImage(source))
             {
-                dc.DrawRectangle(Brushes.Black, null, new Rect(0.0, 0.0, RenderWidth, RenderHeight));
-
+                //dc.DrawRectangle(Brushes.Black, null, new Rect(0.0, 0.0, RenderWidth, RenderHeight));
+                dc.DrawImage(source, new Rect(0.0, 0.0, RenderWidth, RenderHeight));
                 if (skeletons.Length != 0)
                 {
                     foreach (Skeleton skel in skeletons)
@@ -284,21 +285,16 @@ namespace NPI_P2
                             movController.setSkeleton(skel);
                             this.DrawBonesAndJoints(skel, dc);
                             movController.refresh();
-                            //Falta mensaje ejercicio finalizado.
                         }
                         else if (skel.TrackingState == SkeletonTrackingState.PositionOnly)
                         {
-                            dc.DrawEllipse(
-                            this.centerPointBrush,
-                            null,
-                            this.SkeletonPointToScreen(skel.Position),
-                            BodyCenterThickness,
-                            BodyCenterThickness);
+                            dc.DrawEllipse(this.centerPointBrush, null, this.SkeletonPointToScreen(skel.Position), BodyCenterThickness, BodyCenterThickness);
                         }
                     }
                 }
                 this.drawingGroup.ClipGeometry = new RectangleGeometry(new Rect(0.0, 0.0, RenderWidth, RenderHeight));
             }
+            
         }
 
         /// <summary>
@@ -349,13 +345,13 @@ namespace NPI_P2
         private void DrawBonesAndJoints(Skeleton skeleton, DrawingContext drawingContext)
         {
             // Render Torso
-            this.DrawBone(skeleton, drawingContext, JointType.Head, JointType.ShoulderCenter);
-            this.DrawBone(skeleton, drawingContext, JointType.ShoulderCenter, JointType.ShoulderLeft);
-            this.DrawBone(skeleton, drawingContext, JointType.ShoulderCenter, JointType.ShoulderRight);
-            this.DrawBone(skeleton, drawingContext, JointType.ShoulderCenter, JointType.Spine);
-            this.DrawBone(skeleton, drawingContext, JointType.Spine, JointType.HipCenter);
+            //this.DrawBone(skeleton, drawingContext, JointType.Head, JointType.ShoulderCenter);
+            //this.DrawBone(skeleton, drawingContext, JointType.ShoulderCenter, JointType.ShoulderLeft);
+            //this.DrawBone(skeleton, drawingContext, JointType.ShoulderCenter, JointType.ShoulderRight);
+            //this.DrawBone(skeleton, drawingContext, JointType.ShoulderCenter, JointType.Spine);
+            /*this.DrawBone(skeleton, drawingContext, JointType.Spine, JointType.HipCenter);
             this.DrawBone(skeleton, drawingContext, JointType.HipCenter, JointType.HipLeft);
-            this.DrawBone(skeleton, drawingContext, JointType.HipCenter, JointType.HipRight);
+            this.DrawBone(skeleton, drawingContext, JointType.HipCenter, JointType.HipRight);*/
 
             // Left Leg
             this.DrawBone(skeleton, drawingContext, JointType.HipLeft, JointType.KneeLeft);
@@ -391,7 +387,7 @@ namespace NPI_P2
                     drawBrush = this.inferredJointBrush;
                 }
 
-                if (drawBrush != null)
+                if (drawBrush != null && drawBrush != trackedJointBrush)
                 {
                     drawingContext.DrawEllipse(drawBrush, null, this.SkeletonPointToScreen(joint.Position), JointThickness, JointThickness);
                 }
@@ -411,6 +407,7 @@ namespace NPI_P2
             return new Point(depthPoint.X, depthPoint.Y);
         }
 
+        protected readonly Pen trackedBonePen = new Pen(Brushes.Green, 6);
         /// <summary>
         /// Draws a bone line between two joints
         /// </summary>
@@ -443,8 +440,8 @@ namespace NPI_P2
             {
                 drawPen = movController.getPen(jointType0, jointType1);
             }
-
-            drawingContext.DrawLine(drawPen, this.SkeletonPointToScreen(joint0.Position), this.SkeletonPointToScreen(joint1.Position));
+            if(drawPen.Brush != trackedBonePen.Brush)
+                drawingContext.DrawLine(drawPen, this.SkeletonPointToScreen(joint0.Position), this.SkeletonPointToScreen(joint1.Position));
         }
     }
 }
