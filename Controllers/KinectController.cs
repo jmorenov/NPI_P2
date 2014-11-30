@@ -57,6 +57,7 @@ namespace NPI_P2
         private BitmapSource source;
 
         private Image image;
+        private Image correct;
 
         /// <summary>
         /// Variables de control de la ejecución del Kinect.
@@ -73,6 +74,8 @@ namespace NPI_P2
         /// Controlador de los Movimientos.
         /// </summary>
         public MovementController movController = new MovementController();
+
+        private System.Windows.Controls.TextBox time;
 
         /// <summary>
         /// Constructor en el que se definen los objetos para pintar 
@@ -158,6 +161,16 @@ namespace NPI_P2
             image = img;
         }
 
+        public void setCorrectImage(ref Image correct)
+        {
+            this.correct = correct;
+        }
+
+        public void setTextTime(ref System.Windows.Controls.TextBox time)
+        {
+            this.time = time;
+        }
+
         /// <summary>
         /// Finaliza la ejecución del Kinect.
         /// </summary>
@@ -205,6 +218,10 @@ namespace NPI_P2
                     source = ConvertBitmap(bmp);
                 }
                 //image.Source = source;
+                movController.refreshTime();
+                int time_count = (int) movController.getTime();
+                time_count /= 1000;
+                time.Text = ""+ time_count + "seg";
             }
         }
 
@@ -270,11 +287,9 @@ namespace NPI_P2
             }
 
             using (DrawingContext dc = this.drawingGroup.Open())
-            //using (DrawingContext dc = System.Drawing.Graphics.FromImage(source))
             {
-                //dc.DrawRectangle(Brushes.Black, null, new Rect(0.0, 0.0, RenderWidth, RenderHeight));
                 dc.DrawImage(source, new Rect(0.0, 0.0, RenderWidth, RenderHeight));
-                if (skeletons.Length != 0)
+                if (skeletons.Length != 0 && !movController.correct)
                 {
                     foreach (Skeleton skel in skeletons)
                     {
@@ -285,6 +300,10 @@ namespace NPI_P2
                             movController.setSkeleton(skel);
                             this.DrawBonesAndJoints(skel, dc);
                             movController.refresh();
+                            if(movController.correct)
+                            {
+                                correctControl();
+                            }
                         }
                         else if (skel.TrackingState == SkeletonTrackingState.PositionOnly)
                         {
@@ -295,6 +314,22 @@ namespace NPI_P2
                 this.drawingGroup.ClipGeometry = new RectangleGeometry(new Rect(0.0, 0.0, RenderWidth, RenderHeight));
             }
             
+        }
+
+        private void correctControl()
+        {
+            correct.Visibility = System.Windows.Visibility.Visible;
+            timer.Tick += new EventHandler(timer_Tick);
+            timer.Interval = 1500;
+            timer.Enabled = true;
+            timer.Start();
+        }
+
+        private void timer_Tick(object sender, EventArgs e)
+        {
+            correct.Visibility = System.Windows.Visibility.Hidden;
+            movController.correct = false;
+            timer.Stop();
         }
 
         /// <summary>
@@ -374,7 +409,7 @@ namespace NPI_P2
             this.DrawBone(skeleton, drawingContext, JointType.WristRight, JointType.HandRight);
 
             // Render Joints
-            foreach (Joint joint in skeleton.Joints)
+            /*foreach (Joint joint in skeleton.Joints)
             {
                 Brush drawBrush = null;
 
@@ -391,7 +426,7 @@ namespace NPI_P2
                 {
                     drawingContext.DrawEllipse(drawBrush, null, this.SkeletonPointToScreen(joint.Position), JointThickness, JointThickness);
                 }
-            }
+            }*/
         }
 
         /// <summary>
@@ -407,7 +442,6 @@ namespace NPI_P2
             return new Point(depthPoint.X, depthPoint.Y);
         }
 
-        protected readonly Pen trackedBonePen = new Pen(Brushes.Green, 6);
         /// <summary>
         /// Draws a bone line between two joints
         /// </summary>
@@ -440,7 +474,7 @@ namespace NPI_P2
             {
                 drawPen = movController.getPen(jointType0, jointType1);
             }
-            if(drawPen.Brush != trackedBonePen.Brush)
+            if(drawPen.Brush != Brushes.Green)
                 drawingContext.DrawLine(drawPen, this.SkeletonPointToScreen(joint0.Position), this.SkeletonPointToScreen(joint1.Position));
         }
     }

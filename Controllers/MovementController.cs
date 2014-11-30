@@ -33,21 +33,24 @@ namespace NPI_P2
         private double time;
         private double record;
         Stopwatch watch;
+        private int n_replays;
+        private int n_replays_count = 0;
+        public bool correct = false;
 
         /// <summary>
         /// Inicio del ejercicio con el valor de porcentaje de error y ángulo. 
         /// También se inicia el cronómetro para almacenar el tiempo de realización del ejercicio.
         /// </summary>
-        public void startExercise(double ERROR, double angle)
+        public void startExercise(double ERROR, double angle, int n_replays = 1)
         {
             this.ERROR = ERROR;
             this.angle = angle;
+            this.n_replays = n_replays;
             exercise_started = true;
             exercise_finished = false;
             m[mov_i].setAngle(angle);
             m[mov_i].setErrorPercent((float)ERROR);
             time = 0.0;
-            watch = Stopwatch.StartNew();
         }
 
         /// <summary>
@@ -55,7 +58,7 @@ namespace NPI_P2
         /// </summary>
         public void refresh()
         {
-            if (exercise_started)
+            if (exercise_started && !correct)
             {
                 bool finish = false;
                 finish = m[mov_i].isFinished();
@@ -64,13 +67,42 @@ namespace NPI_P2
                     mov_i++;
                     if (mov_i >= m.Count)
                     {
-                        watch.Stop();
-                        time = watch.ElapsedMilliseconds;
-                        record = time / ERROR;
-                        exercise_finished = true;
+                        if (n_replays_count >= n_replays)
+                        {
+                            finishExercise();
+                        }
+                        else
+                        {
+                            n_replays_count++;
+                            mov_i = 0;
+                        }
+                    }
+                    if (n_replays_count == 0) //Tutorial finalizado, empezando ejercicio.
+                    {
+                        correct = true;
+                        watch = Stopwatch.StartNew();
                     }
                 }
             }
+        }
+
+        public bool isActualMovFinished()
+        {
+            return m[mov_i].isFinished();
+        }
+
+        public void refreshTime()
+        {
+            if(watch != null && watch.IsRunning)
+                time = watch.ElapsedMilliseconds;
+        }
+
+        private void finishExercise()
+        {
+            watch.Stop();
+            time = watch.ElapsedMilliseconds;
+            record = 1000 / ((time/1000) * ERROR);
+            exercise_finished = true;
         }
 
         /// <summary>
@@ -91,7 +123,6 @@ namespace NPI_P2
 
         public double getRecord()
         {
-
             return record;
         }
 

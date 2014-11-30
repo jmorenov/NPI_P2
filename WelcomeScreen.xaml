@@ -27,8 +27,11 @@
         </Border.Background>
 
         <Grid Name="buttonGrid">
-            <Button Content="Iniciar" Grid.Column="0" FontSize="50" Background="AliceBlue" FontFamily="KaiTi"  Height="100" Width="250" HorizontalAlignment="Center" Name="button1" VerticalAlignment="Center" Click="button1_Click" Margin="0,0,0,0" />
-            <TextBox Name="NumberTextBox" Text="5" PreviewTextInput="NumberValidationTextBox" Background="AliceBlue" FontSize="35" FontFamily="KaiTi" Width="200" Height="80" HorizontalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" VerticalAlignment="Center" Margin="0,270,0,0"/>
+            <Button Content="Iniciar" Grid.Column="0" FontSize="50" Background="AliceBlue" FontFamily="KaiTi"  Height="100" Width="250" HorizontalAlignment="Center" Name="button1" VerticalAlignment="Center" Click="button1_Click" Margin="0,0,0,100" />
+            <Button Content="Fácil" Grid.Column="0" FontSize="30" Background="AliceBlue" FontFamily="KaiTi"  Height="60" Width="120" HorizontalAlignment="Center" Name="button_easy" VerticalAlignment="Center" Click="button_easy_Click" Margin="0,100,0,0" />
+            <Button Content="Medio" Grid.Column="0" FontSize="30" Background="AliceBlue" FontFamily="KaiTi"  Height="60" Width="120" HorizontalAlignment="Center" Name="button_medium" VerticalAlignment="Center" Click="button_medium_Click" Margin="0,260,0,0" />
+            <Button Content="Dificil" Grid.Column="0" FontSize="30" Background="AliceBlue" FontFamily="KaiTi"  Height="60" Width="120" HorizontalAlignment="Center" Name="button_hard" VerticalAlignment="Center" Click="button_hard_Click" Margin="0,420,0,0" />
+            <TextBox Visibility="Hidden"  Name="NumberTextBox" Text="5" PreviewTextInput="NumberValidationTextBox" Background="AliceBlue" FontSize="35" FontFamily="KaiTi" Width="200" Height="80" HorizontalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" VerticalAlignment="Center" Margin="0,270,0,0"/>
             <TextBox Visibility="Hidden" Name="ERROR" Text="ERROR: Kinect desconectado. Conectelo y ejecute de nuevo la app." Background="AliceBlue" FontSize="35" FontFamily="KaiTi" VerticalAlignment="Center" HorizontalAlignment="Center" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Width="Auto" Height="Auto"/>
             <Button Name="About" Content="About NPI Fitness" HorizontalAlignment="Right" VerticalAlignment="Bottom" Background="Transparent" FontSize="15" FontFamily="KaiTi" Margin="0,0,20,20" Click="About_Click" />
         </Grid>

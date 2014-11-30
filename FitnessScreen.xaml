@@ -11,6 +11,7 @@
 
     <Grid Name="layoutGrid" Background="Black">
         <Image x:FieldModifier="public" Name="ImageSkeleton" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-        <!--<Image Name="ImageVideo" HorizontalAlignment="Left"/>-->
+        <Image Name="correct" Visibility="Hidden" HorizontalAlignment="Right" VerticalAlignment="Center" Source="Images/correct.png" Width="166" Height="163"/>
+        <TextBox Text="" TextAlignment="Center" HorizontalAlignment="Right" VerticalAlignment="Bottom" Foreground="AliceBlue"  Background="Transparent" Name="time" Width="Auto" Height="Auto" FontFamily="KaiTi" FontSize="60"/>
     </Grid>
 </PageFunction>

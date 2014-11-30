@@ -54,15 +54,5 @@ namespace NPI_P2
                 this.NavigationService.Navigate(new Uri("WelcomeScreen.xaml", UriKind.Relative));
             }
         }
-
-        private void Page_Unloaded(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        ~LoadingScreen()
-        {
-
-        }
     }
 }

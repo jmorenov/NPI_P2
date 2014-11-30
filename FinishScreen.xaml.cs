@@ -23,7 +23,7 @@ namespace NPI_P2
         public FinishScreen(double time, double difficulty, double record)
         {
             InitializeComponent();
-            TextFinish.Text = "Ejercicio acabado con éxito.\nDificultad: "+ difficulty + ".\nTiempo empleado en la realización: " + time + " segundos.\nPuntuación: "+ record +".";
+            TextFinish.Text = "Ejercicio acabado con éxito.\nDificultad: "+ difficulty + ".\nTiempo empleado en la realización: " + time/1000 + " segundos.\nPuntuación: "+ record +".";
         }
 
         /// <summary>

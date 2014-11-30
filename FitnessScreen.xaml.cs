@@ -31,6 +31,7 @@ namespace NPI_P2
         /// </summary>
         private double difficulty;
         private double angle = 30;
+        private int n_replays = 5;
 
         private Thread thread;
 
@@ -54,6 +55,8 @@ namespace NPI_P2
             else
             {
                 kinect.setImageSkeleton(ref ImageSkeleton);
+                kinect.setTextTime(ref time);
+                kinect.setCorrectImage(ref correct);
                 //kinect.setImageSource(ref ImageVideo);
                 thread.Start();
             }
@@ -61,9 +64,9 @@ namespace NPI_P2
 
         private void controlKinect()
         {
-                kinect.movController.startExercise(difficulty, angle);
+                kinect.movController.startExercise(difficulty, angle, n_replays);
                 while (!kinect.movController.isFinished())
-                { }
+                {}
                 if (kinect.movController.isFinished())
                 {
                     double record = kinect.movController.getRecord();
@@ -88,10 +91,6 @@ namespace NPI_P2
         {
             if (kinect.isConnected() && kinect.isStarted())
                 kinect.close();
-            /*if (thread != null && (thread.IsAlive || thread.IsBackground))
-            {
-                thread.Abort();
-            }*/
         }
     }
 }

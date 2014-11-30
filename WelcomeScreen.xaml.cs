@@ -12,6 +12,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Text.RegularExpressions;
+using System.Windows.Forms;
 
 namespace NPI_P2
 {
@@ -25,7 +26,7 @@ namespace NPI_P2
         /// <summary>
         /// Argumento de porcentaje de error con el que se realizará el ejercicio.
         /// </summary>
-        private double difficulty;
+        private double difficulty = 0;
 
         public WelcomeScreen()
         {
@@ -50,31 +51,41 @@ namespace NPI_P2
         /// </summary>
         private void button1_Click(object sender, RoutedEventArgs e)
         {
-            bool correct = false;
-            if (NumberTextBox.Text != "")
+            if (NumberTextBox.Visibility == System.Windows.Visibility.Visible)
             {
-                try
+                bool correct = false;
+                if (NumberTextBox.Text != "")
                 {
-                    int percent = Convert.ToInt32(NumberTextBox.Text);
-                    if (percent < 100)
+                    try
                     {
-                        difficulty = percent / 100.0;
-                        correct = true;
+                        int percent = Convert.ToInt32(NumberTextBox.Text);
+                        if (percent < 100)
+                        {
+                            difficulty = percent / 100.0;
+                            correct = true;
+                        }
+                    }
+                    catch (Exception)
+                    {
                     }
                 }
-                catch (Exception)
+                if (correct)
                 {
+                    FitnessScreen FitnessScreen = new FitnessScreen(difficulty);
+                    this.NavigationService.Navigate(FitnessScreen);
+                }
+                else
+                {
+                    NumberTextBox.Clear();
                 }
             }
-            if (correct)
+            else if(difficulty != 0)
             {
                 FitnessScreen FitnessScreen = new FitnessScreen(difficulty);
                 this.NavigationService.Navigate(FitnessScreen);
             }
             else
-            {
-                NumberTextBox.Clear();
-            }
+                System.Windows.Forms.MessageBox.Show("Debes seleccionar un nivel de dificultad.", "Nivel de dificultad sin seleccionar", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
         }
 
         /// <summary>
@@ -93,6 +104,21 @@ namespace NPI_P2
         {
             About_NPI_Fitness about = new About_NPI_Fitness();
             about.ShowDialog();
+        }
+
+        private void button_easy_Click(object sender, RoutedEventArgs e)
+        {
+            difficulty = 20;
+        }
+
+        private void button_medium_Click(object sender, RoutedEventArgs e)
+        {
+            difficulty = 10;
+        }
+
+        private void button_hard_Click(object sender, RoutedEventArgs e)
+        {
+            difficulty = 5;
         }
     }
 }
